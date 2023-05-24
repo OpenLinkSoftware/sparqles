@@ -27,7 +27,7 @@ Prerequisites:
 Run the first time (or when you need to recreate the DB from the dump):
 
 ```
-docker image rm sparqles_database-svc --force ; \
+docker image rm sparqles-database-svc --force ; \
     rm -rf data/db/ ;
     docker-compose up --build
 ```
@@ -41,8 +41,8 @@ docker-compose up -d
 While the MongoDB is running, you need to initialize the scheduler by fetching the endpoints from from the databus.io first and then generating the schedule:
 
 ```
-sh bin/sparqles -p src/main/resources/sparqles.properties -i
-sh bin/sparqles -p src/main/resources/sparqles.properties -rs
+sh bin/sparqles -p src/main/resources/sparqles_docker.properties -i
+sh bin/sparqles -p src/main/resources/sparqles_docker.properties -rs
 ```
 
 ## Deploying the application manually

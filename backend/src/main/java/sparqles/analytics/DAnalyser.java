@@ -98,6 +98,25 @@ public class DAnalyser extends Analytics<DResult> {
 
 		//		depview.setSDDescription(l);
 
+		if (dview.getVoID() == false) {
+		    log.info("[CKECK if VoiD has been generated] {}",pres);
+		    //TODO
+		    
+
+		    // if VoID has to be generated
+		    if (true) { 
+			log.info("[GENERATION of VoiD] {}",pres);
+			//TODO
+
+
+			dview.setGeneratedVoID(true);
+		    }
+		}
+		else {
+		    dview.setGeneratedVoID(false);
+		}
+		
+
 		dview.setLastUpdate(pres.getEndpointResult().getEnd());
 
 		_db.update(dview);

@@ -37,10 +37,10 @@ app.get('/', function(req, res){
 		/*var eps = JSON.parse(fs.readFileSync('./examples/index.json'));*/
 		mongoDBProvider.endpointsCount(function(error,nbEndpointsSearch){
 		//console.log(docs);
-			mongoDBProvider.getLastUpdate( function(error,lastUpdate){
-			//console.log(lastUpdate);
-				mongoDBProvider.getIndex( function(error,index){
-				//console.log(index);
+		    mongoDBProvider.getLastUpdate( function(error,lastUpdate){
+                    //console.log(lastUpdate);
+			mongoDBProvider.getIndex( function(error,index){
+			//console.log(index);
           mongoDBProvider.getAMonths( function(error,amonths){
             //console.log(JSON.stringify(amonths));
             var indexInterop = JSON.parse(JSON.stringify(index.interoperability.data), function(k, v) {
@@ -352,21 +352,24 @@ app.get('/discoverability', function(req, res){
 		mongoDBProvider.endpointsCount(function(error,nbEndpointsSearch){
 			mongoDBProvider.getDiscoView( function(error,docs){
 				var lastUpdate=0;
-				var nbEndpointsVoID=0;
+			        var nbEndpointsVoID=0;
+			        var nbEndpointsGeneratedVoID=0;
 				var nbEndpointsSD=0;
 				var nbEndpointsServerName=0;
 				var nbEndpointsTotal=0;
 				for (i in docs){
 					nbEndpointsTotal++;
 					if(docs[i].lastUpdate>lastUpdate) lastUpdate=docs[i].lastUpdate;
-					if(docs[i].VoID==true)nbEndpointsVoID++;
+				        if(docs[i].VoID==true)nbEndpointsVoID++;
+				        if(docs[i].generatedVoID==true)nbEndpointsGeneratedVoID++;
 					if(docs[i].SD==true)nbEndpointsSD++;
 					if(docs[i].serverName.length>0&&docs[i].serverName!="missing") nbEndpointsServerName++;
 				}
 				res.render('content/discoverability.jade',{
 					lastUpdate: new Date(lastUpdate).toUTCString(),
 					nbEndpointsSearch:nbEndpointsSearch,
-					nbEndpointsVoID: nbEndpointsVoID,
+				        nbEndpointsVoID: nbEndpointsVoID,
+				        nbEndpointsGeneratedVoID: nbEndpointsGeneratedVoID,
 					nbEndpointsSD: nbEndpointsSD,
 					nbEndpointsServerName: nbEndpointsServerName,
 					nbEndpointsTotal: nbEndpointsTotal,

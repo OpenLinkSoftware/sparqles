@@ -117,7 +117,11 @@ block content
                         - each feature, i in epDisco.VoIDDescription
                           tr(class=(i % 2 == 0) ? 'odd' : 'even')
                             td
-                              span(onmouseover='tooltip.show(\'#{configDisco[feature.label]}\')', onmouseout='tooltip.hide();') #{feature.label}
+                              span(onmouseover='tooltip.show(\'#{configDisco[feature.label]}\')', onmouseout='tooltip.hide();')
+                                if feature.label == 'Generated VoID' && feature.value
+                                  a(href="") #{feature.label}
+                                else
+                                  | #{feature.label}
                             td.tdcenter
                               if feature.value
                                 img(src='/images/green.png')

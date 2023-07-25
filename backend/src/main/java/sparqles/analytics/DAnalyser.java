@@ -18,10 +18,58 @@ import sparqles.avro.discovery.QueryInfo;
 import sparqles.core.discovery.DTask;
 import sparqles.utils.MongoDBManager;
 
+//import org.apache.jena.*;
+//import org.apache.jena.rdf.Model;
+import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.vocabulary.*;
+import com.hp.hpl.jena.query.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+//import org.apache.jena.rdf.model.*;
+//import org.apache.jena.sparql.resultset.JSONOutput;
+
 public class DAnalyser extends Analytics<DResult> {
 	private static final Logger log = LoggerFactory.getLogger(DAnalyser.class);
 
+	private final static String sparqDescNS = "http://www.w3.org/ns/sparql-service-description#";
+	private final static String voidNS = "http://rdfs.org/ns/void#";
+	private final static String dctermsNS = "http://purl.org/dc/terms/";
+	private final static String foafNS = "http://xmlns.com/foaf/0.1/";
 
+	private final static String queryPingEndpoint = "" +
+			"ASK { ?s ?p ?o }";
+    
+	private final static String queryNumberOfTriples = "" +
+			"SELECT (COUNT (*) as ?value)\n"+
+			"WHERE { ?s ?p ?o }";
+
+	private final static String queryNumberOfEntities = "" +
+			"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+			"SELECT (COUNT (DISTINCT ?entity) as ?value)\n"+
+			"WHERE { ?entity rdf:type ?class }";
+
+	private final static String queryNumberOfClasses = "" +
+			"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+			"SELECT (COUNT (DISTINCT ?class) as ?value)\n"+
+			"WHERE { ?entity rdf:type ?class }";
+
+	private final static String queryNumberOfProperties = "" +
+			"SELECT (COUNT (DISTINCT ?p) as ?value)\n"+
+			"WHERE { ?s ?p ?o }";
+
+	private final static String queryNumberOfSubjects = "" +
+			"SELECT (COUNT (DISTINCT ?s) as ?value)\n"+
+			"WHERE { ?s ?p ?o }";
+
+	private final static String queryNumberOfObjects = "" +
+			"SELECT (COUNT (DISTINCT ?o) as ?value)\n"+
+			"WHERE { ?s ?p ?o }";
+
+	private final static String queryExampleResource = "" +
+			"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+			"SELECT ?value\n"+
+			"WHERE { ?value rdf:type ?class }\n" +
+			"LIMIT 1";
 
 	public DAnalyser(MongoDBManager db) {
 		super(db);
@@ -36,6 +84,7 @@ public class DAnalyser extends Analytics<DResult> {
 		DiscoverabilityView dview= getView(ep);
 		EPView epview=getEPView(ep);
 
+		String endpointURL = ep.getUri().toString();
 
 		List<EPViewDiscoverabilityData> lvoid = new ArrayList<EPViewDiscoverabilityData>();
 		List<EPViewDiscoverabilityData> lsd = new ArrayList<EPViewDiscoverabilityData>();
@@ -99,7 +148,7 @@ public class DAnalyser extends Analytics<DResult> {
 		//		depview.setSDDescription(l);
 
 		if (dview.getVoID() == false) {
-		    log.info("[CKECK if VoiD has been generated] {}",pres);
+		    log.info("[CHECK if VoiD has been generated {}]",pres);
 		    //TODO
 		    
 
@@ -108,8 +157,130 @@ public class DAnalyser extends Analytics<DResult> {
 			log.info("[GENERATION of VoiD] {}",pres);
 			//TODO
 
+			int triples = 0;
+			int entities = 0;
+			int classes = 0;
+			int properties = 0;
+			int distinctSubjects = 0;
+			int distinctObjects = 0;
+			String exampleResource = "";
 
-			dview.setGeneratedVoID(true);
+			/*
+			Query query1 = QueryFactory.create(queryPingEndpoint);
+			QueryExecution qexec1 = QueryExecutionFactory.sparqlService(endpointURL, query1);
+			Boolean ping = false;
+			try {
+			    ping = qexec1.execAsk();
+			    log.info("[Ping value is {}]", ping);
+			}
+			catch (Exception e) {
+			    log.info("[Error executing SPARQL query for {}]", endpointURL);
+			    log.info("[Error details: {}]", e.toString());
+			}
+			*/
+			
+			Boolean ping = false;
+			for(QueryInfo info: pres.getQueryInfo()){
+			    if("query-self".contentEquals(info.getOperation())){
+				if (info.getException() == null)
+				    ping = true;
+			    }
+			}
+			if (ping) {
+			    log.info("[Ping value is {}]", ping);
+			    RDFNode n = executeQuery(endpointURL, queryNumberOfTriples);
+			    if (n != null)
+				triples = ((Literal)n).getInt();
+			    n = executeQuery(endpointURL, queryNumberOfEntities);
+			    if (n != null)
+				entities = ((Literal)n).getInt();
+			    n = executeQuery(endpointURL, queryNumberOfClasses);
+			    if (n != null)
+				classes = ((Literal)n).getInt();
+			    n = executeQuery(endpointURL, queryNumberOfProperties);
+			    if (n != null)
+				properties = ((Literal)n).getInt();
+			    n = executeQuery(endpointURL, queryNumberOfSubjects);
+			    if (n != null)
+				distinctSubjects = ((Literal)n).getInt();
+			    n = executeQuery(endpointURL, queryNumberOfObjects);
+			    if (n != null)
+				distinctObjects = ((Literal)n).getInt();
+			    n = executeQuery(endpointURL, queryExampleResource);
+			    if (n != null)
+				exampleResource = ((Resource)n).toString();
+
+			    Model model = ModelFactory.createDefaultModel();
+			    
+			    Resource endpointEntity = model.createResource(endpointURL);
+			    Resource endpointEntityDescription = model.createResource(endpointURL + "/profile");
+			    
+			    Resource sdService = model.createResource(sparqDescNS + "Service");
+			    Resource sdDataset = model.createResource(sparqDescNS + "Dataset");
+			    Resource sdGraph = model.createResource(sparqDescNS + "Graph");
+			    Resource voidDatasetDescription = model.createResource(voidNS + "DatasetDescription");
+			    Resource voidDataset = model.createResource(voidNS + "Dataset");
+			    Resource sparqlesEntity = model.createResource("https://sparqles.demo.openlinksw.com"); // TODO: This is hardcoded for now, needs to be dynamic
+			    
+			    Property sdendpoint = model.createProperty(sparqDescNS + "endpoint");
+			    Property sddefaultDataset = model.createProperty(sparqDescNS + "defaultDataset");
+			    Property sddefaultGraph = model.createProperty(sparqDescNS + "defaultGraph");
+			    Property voidtriples = model.createProperty(voidNS + "triples");
+			    Property voidentities = model.createProperty(voidNS + "entities");
+			    Property voidclasses = model.createProperty(voidNS + "classes");
+			    Property voidproperties = model.createProperty(voidNS + "properties");
+			    Property voiddistinctSubjects = model.createProperty(voidNS + "distinctSubjects");
+			    Property voiddistinctObjects = model.createProperty(voidNS + "distinctObjects");
+			    Property dctermsTitle = model.createProperty(dctermsNS + "title");
+			    Property dctermsCreator = model.createProperty(dctermsNS + "creator");
+			    Property dctermsDate = model.createProperty(dctermsNS + "date");
+			    Property foafprimaryTopic = model.createProperty(foafNS + "primaryTopic");
+			    Property voidsparqlEndpoint = model.createProperty(voidNS + "sparqlEndpoint");
+			    Property voidexampleResource = model.createProperty(voidNS + "exampleResource");
+			    
+			    // get current date
+			    LocalDate currentDate = LocalDate.now();
+			    String currentDateString = currentDate.format(DateTimeFormatter.ISO_DATE);
+			    //Literal currentDateLiteral = model.createTypedLiteral(currentDateString, XSD.date);
+			    Literal currentDateLiteral = model.createLiteral(currentDateString);
+			    
+			    // construct the SPARQL Service Description in RDF
+			    endpointEntity.addProperty(RDF.type, sdService);
+			    endpointEntity.addProperty(sdendpoint, endpointEntity);
+			    endpointEntity.addProperty(sddefaultDataset,
+						       model.createResource().addProperty(RDF.type, sdDataset)
+						       .addProperty(sddefaultGraph,
+								    model.createResource().addProperty(RDF.type, sdGraph)
+								    .addProperty(voidtriples, Integer.toString(triples))));
+			    
+			    // construct the VoID Profile in RDF
+			    endpointEntityDescription.addProperty(RDF.type, voidDatasetDescription);
+			    endpointEntityDescription.addProperty(dctermsTitle, "Automatically constructed VoID description for a SPARQL Endpoint");
+			    endpointEntityDescription.addProperty(dctermsCreator, sparqlesEntity);
+			    endpointEntityDescription.addProperty(dctermsDate, currentDateLiteral);
+			    endpointEntityDescription.addProperty(foafprimaryTopic, endpointEntity);
+			    
+			    endpointEntity.addProperty(RDF.type, voidDataset);
+			    endpointEntity.addProperty(voidsparqlEndpoint, endpointEntity);
+			    // TODO
+			    if (exampleResource != "")
+				endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResource));
+			    // endpointEntity.addProperty(voidexampleResource, //example resource 2);
+			    // endpointEntity.addProperty(voidexampleResource, //example resource 3);
+			    endpointEntity.addProperty(voidtriples, Integer.toString(triples));
+			    endpointEntity.addProperty(voidentities, Integer.toString(entities));
+			    endpointEntity.addProperty(voidclasses, Integer.toString(classes));
+			    endpointEntity.addProperty(voidproperties, Integer.toString(properties));
+			    endpointEntity.addProperty(voiddistinctSubjects, Integer.toString(distinctSubjects));
+			    endpointEntity.addProperty(voiddistinctObjects, Integer.toString(distinctObjects));
+			    
+			    model.write(System.out, "TURTLE");
+			    
+			    dview.setGeneratedVoID(true);
+			}
+			else {
+			    dview.setGeneratedVoID(false);
+			}			
 		    }
 		}
 		else {
@@ -195,7 +366,25 @@ public class DAnalyser extends Analytics<DResult> {
 		//		
 		//		return true;
 	}
-
+    
+        public RDFNode executeQuery(String endpointURL, String queryText) {
+		Query query = QueryFactory.create(queryText);
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpointURL, query);
+		RDFNode node = null;
+		try {
+		    ResultSet results = qexec.execSelect();
+		    if(results.hasNext()){
+			QuerySolution thisRow = results.next();
+			node = ((RDFNode) thisRow.get("value"));
+		    }
+		}
+		catch (Exception e) {
+		    log.info("[Error executing SPARQL query for {}]", endpointURL);
+		    log.info("[Error details: {}]", e.toString());
+		}
+		qexec.close() ;
+		return node;
+	}
 
 	private DiscoverabilityView getView(Endpoint ep) {
 		DiscoverabilityView view =null;

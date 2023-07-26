@@ -406,6 +406,7 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		catch (Exception e) {
 		    log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[SPARQL query: {}]", queryText);
 		    log.info("[Error details: {}]", e.toString());
 		}
 		qexec.close() ;
@@ -414,12 +415,15 @@ public class DAnalyser extends Analytics<DResult> {
 
 	public double calculateCoherence(String endpointUrl) {
 		Set<String> types = getRDFTypes(endpointUrl);
+		if(types.size()==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 		double weightedDenomSum = getTypesWeightedDenomSum(types, endpointUrl);
+		if(weightedDenomSum==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 		double structuredness = 0;
 		for(String type:types) {
 			long occurenceSum = 0;
 			Set<String> typePredicates = getTypePredicates(type, endpointUrl);
 			long typeInstancesSize = getTypeInstancesSize(type, endpointUrl);
+			if(typeInstancesSize==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 			for (String predicate:typePredicates)
 			{
 				long predicateOccurences = getOccurences(predicate, type, endpointUrl);
@@ -449,6 +453,7 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		catch (Exception e) {
 			log.info("[Error executing SPARQL query for {}]", endpoint);
+			log.info("[SPARQL query: {}]", queryString);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();
@@ -483,6 +488,7 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		catch (Exception e) {
 			log.info("[Error executing SPARQL query for {}]", endpoint);
+			log.info("[SPARQL query: {}]", queryString);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();
@@ -509,6 +515,7 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		catch (Exception e) {
 			log.info("[Error executing SPARQL query for {}]", endpoint);
+			log.info("[SPARQL query: {}]", queryString);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();
@@ -532,6 +539,7 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		catch (Exception e) {
 			log.info("[Error executing SPARQL query for {}]", endpoint);
+			log.info("[SPARQL query: {}]", queryString);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();

@@ -1,0 +1,11 @@
+{
+"namespace": "sparqles.avro.analytics",
+"type": "record",
+"name": "Profile",
+"fields": [ 
+{"name": "endpoint", "type": "sparqles.avro.Endpoint"},
+	{"name": "VoID", "type": "string"},
+	{"name": "SD", "type": "string"},
+	{"name": "lastUpdate", "type": "long"}
+]
+}

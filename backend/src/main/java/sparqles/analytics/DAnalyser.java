@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import sparqles.avro.Endpoint;
 import sparqles.avro.analytics.DiscoverabilityView;
+import sparqles.avro.analytics.Profile;
 import sparqles.avro.analytics.EPView;
 import sparqles.avro.analytics.EPViewDiscoverability;
 import sparqles.avro.analytics.EPViewDiscoverabilityData;
@@ -83,6 +84,7 @@ public class DAnalyser extends Analytics<DResult> {
 
 		DiscoverabilityView dview= getView(ep);
 		EPView epview=getEPView(ep);
+		Profile pview = getProfileView(ep);
 
 		String endpointURL = ep.getUri().toString();
 
@@ -281,10 +283,13 @@ public class DAnalyser extends Analytics<DResult> {
 			    endpointEntity.addProperty(voidproperties, Integer.toString(properties));
 			    endpointEntity.addProperty(voiddistinctSubjects, Integer.toString(distinctSubjects));
 			    endpointEntity.addProperty(voiddistinctObjects, Integer.toString(distinctObjects));
-			    
-			    model.write(System.out, "TURTLE");
 
-				// TODO: Persist the created Void + SD profile
+			    java.io.StringWriter stringModel = new java.io.StringWriter() ;
+			    model.write(stringModel, "TURTLE");
+
+			    pview.setVoID(stringModel.toString());
+			    pview.setSD("test2");
+			    pview.setLastUpdate(System.currentTimeMillis());
 			    
 			    dview.setGeneratedVoID(true);
 			}
@@ -302,6 +307,7 @@ public class DAnalyser extends Analytics<DResult> {
 
 		_db.update(dview);
 		_db.update(epview);
+		_db.update(pview);
 		return true;
 
 		//		SummaryStatistics askStatsCold = new SummaryStatistics();
@@ -411,6 +417,29 @@ public class DAnalyser extends Analytics<DResult> {
 			view.setSD(false);
 			view.setVoID(false);
 			view.setServerName("missing");
+			view.setLastUpdate(-1L);
+			if (_db  != null)
+				_db.insert(view);
+		}else{
+			view = views.get(0);
+		}
+		return view;
+	}
+
+    	private Profile getProfileView(Endpoint ep) {
+		Profile view =null;
+		List<Profile> views = new ArrayList<Profile>();
+		if (_db  != null){
+			views = _db.getResults(ep,Profile.class, Profile.SCHEMA$);
+		}
+		if(views.size()!=1){
+			Log.warn("We have {} Profiles, expected was 1",views.size());
+		}
+		if(views.size()==0){
+			view = new Profile();
+			view.setEndpoint(ep);
+			view.setSD("");
+			view.setVoID("");
 			view.setLastUpdate(-1L);
 			if (_db  != null)
 				_db.insert(view);

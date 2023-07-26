@@ -2,6 +2,9 @@ package sparqles.analytics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mortbay.log.Log;
 import org.slf4j.Logger;
@@ -168,6 +171,7 @@ public class DAnalyser extends Analytics<DResult> {
 			int distinctSubjects = 0;
 			int distinctObjects = 0;
 			String exampleResource = "";
+			double coherence = 0.0;
 
 			/*
 			Query query1 = QueryFactory.create(queryPingEndpoint);
@@ -218,6 +222,7 @@ public class DAnalyser extends Analytics<DResult> {
 			    n = executeQuery(endpointURL, queryExampleResource);
 			    if (n != null)
 				exampleResource = ((Resource)n).toString();
+				coherence = calculateCoherence(endpointURL);
 
 			    Model model = ModelFactory.createDefaultModel();
 			    
@@ -246,7 +251,8 @@ public class DAnalyser extends Analytics<DResult> {
 			    Property foafprimaryTopic = model.createProperty(foafNS + "primaryTopic");
 			    Property voidsparqlEndpoint = model.createProperty(voidNS + "sparqlEndpoint");
 			    Property voidexampleResource = model.createProperty(voidNS + "exampleResource");
-			    
+				Property coherenceValue = model.createProperty("https://www.3dfed.com/ontology/coherence");
+
 			    // get current date
 			    LocalDate currentDate = LocalDate.now();
 			    String currentDateString = currentDate.format(DateTimeFormatter.ISO_DATE);
@@ -284,6 +290,10 @@ public class DAnalyser extends Analytics<DResult> {
 			    endpointEntity.addProperty(voiddistinctSubjects, Integer.toString(distinctSubjects));
 			    endpointEntity.addProperty(voiddistinctObjects, Integer.toString(distinctObjects));
 
+				// add the Coherence value for the endpoint
+				endpointEntity.addProperty(coherenceValue, Double.toString(coherence));
+
+				// the profile has been generated, now we persist it
 			    java.io.StringWriter stringModel = new java.io.StringWriter() ;
 			    model.write(stringModel, "TURTLE");
 
@@ -383,7 +393,7 @@ public class DAnalyser extends Analytics<DResult> {
 		//		return true;
 	}
     
-        public RDFNode executeQuery(String endpointURL, String queryText) {
+	public RDFNode executeQuery(String endpointURL, String queryText) {
 		Query query = QueryFactory.create(queryText);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpointURL, query);
 		RDFNode node = null;
@@ -400,6 +410,105 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		qexec.close() ;
 		return node;
+	}
+
+	public double calculateCoherence(String endpointUrl) {
+		Set<String> types = getRDFTypes(endpointUrl);
+		double weightedDenomSum = getTypesWeightedDenomSum(types, endpointUrl);
+		double structuredness = 0;
+		for(String type:types) {
+			long occurenceSum = 0;
+			Set<String> typePredicates = getTypePredicates(type, endpointUrl);
+			long typeInstancesSize = getTypeInstancesSize(type, endpointUrl);
+			for (String predicate:typePredicates)
+			{
+				long predicateOccurences = getOccurences(predicate, type, endpointUrl);
+				occurenceSum = (occurenceSum + predicateOccurences);
+			}
+			double denom = typePredicates.size() * typeInstancesSize;
+			if(typePredicates.size()==0)
+				denom = 1;
+			double coverage = occurenceSum/denom;
+			double weightedCoverage = (typePredicates.size()+ typeInstancesSize) / weightedDenomSum;
+			structuredness = (structuredness + (coverage*weightedCoverage));
+		}
+		return structuredness;
+	}
+
+	public static Set<String> getRDFTypes(String endpoint) {
+		Set<String> types = new HashSet<String>() ;
+		String queryString = ""
+				+ "SELECT DISTINCT ?type\n"
+				+ "WHERE { ?s a ?type }" ;
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+		ResultSet res = qExec.execSelect();
+		while (res.hasNext())
+			types.add(res.next().get("type").toString());
+		return types;
+	}
+
+	public static double getTypesWeightedDenomSum(Set<String> types, String endpoint) {
+		double sum = 0 ;
+		for (String type:types)
+		{
+			long typeInstancesSize = getTypeInstancesSize(type, endpoint);
+			long typePredicatesSize = getTypePredicates(type, endpoint).size();
+			sum = sum + typeInstancesSize + typePredicatesSize;
+		}
+		return sum;
+	}
+
+	public static long getTypeInstancesSize(String type, String endpoint)  {
+		long typeInstancesSize = 0;
+		String queryString = ""
+			+ "SELECT (COUNT (DISTINCT ?s) as ?cnt ) \n"
+			+ "WHERE {\n"
+			+ "   ?s a <"+type.replaceAll("\\s", "")+"> . "
+			+ "   ?s ?p ?o"
+			+ "}" ;
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+		ResultSet res= qExec.execSelect();
+		while(res.hasNext())
+			typeInstancesSize = Long.parseLong(res.next().get("cnt").asLiteral().getString());
+		return typeInstancesSize;
+	}
+
+	public static Set<String> getTypePredicates(String type, String endpoint)  {
+		Set<String> typePredicates = new HashSet<String>();
+		String queryString = ""
+			+ "SELECT DISTINCT ?typePred \n"
+			+ "WHERE { \n"
+			+ "   ?s a <"+type.replaceAll("\\s", "")+"> . "
+			+ "   ?s ?typePred ?o"
+			+ "}" ;
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
+		ResultSet res= qExec.execSelect();
+		while(res.hasNext())
+		{
+			String predicate = res.next().get("typePred").toString();
+			if (!predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))
+				typePredicates.add(predicate);
+		}
+		return typePredicates;
+	}
+
+	public static long getOccurences(String predicate, String type, String endpoint)  {
+		long predicateOccurences = 0;
+		String queryString = ""
+			+ "SELECT (COUNT (DISTINCT ?s) as ?occurences) \n"
+			+ "WHERE { \n"
+			+ "   ?s a <"+type.replaceAll("\\s", "")+"> . "
+			+ "   ?s <"+predicate+"> ?o"
+			+ "}" ;
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+		ResultSet res= qExec.execSelect();
+		while(res.hasNext())
+			predicateOccurences = Long.parseLong(res.next().get("occurences").asLiteral().getString());
+		return predicateOccurences;
 	}
 
 	private DiscoverabilityView getView(Endpoint ep) {

@@ -6,6 +6,7 @@
 {"name": "endpoint", "type": "sparqles.avro.Endpoint"},
 	{"name": "VoID", "type": "string"},
 	{"name": "SD", "type": "string"},
+	{"name": "coherence", "type": "double"},
 	{"name": "lastUpdate", "type": "long"}
 ]
 }

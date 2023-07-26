@@ -7,11 +7,12 @@ package sparqles.avro.analytics;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Profile extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Profile\",\"namespace\":\"sparqles.avro.analytics\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"lastUpdate\",\"type\":\"long\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Profile\",\"namespace\":\"sparqles.avro.analytics\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"lastUpdate\",\"type\":\"long\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public sparqles.avro.Endpoint endpoint;
   @Deprecated public java.lang.CharSequence VoID;
   @Deprecated public java.lang.CharSequence SD;
+  @Deprecated public double coherence;
   @Deprecated public long lastUpdate;
 
   /**
@@ -24,10 +25,11 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
   /**
    * All-args constructor.
    */
-  public Profile(sparqles.avro.Endpoint endpoint, java.lang.CharSequence VoID, java.lang.CharSequence SD, java.lang.Long lastUpdate) {
+  public Profile(sparqles.avro.Endpoint endpoint, java.lang.CharSequence VoID, java.lang.CharSequence SD, java.lang.Double coherence, java.lang.Long lastUpdate) {
     this.endpoint = endpoint;
     this.VoID = VoID;
     this.SD = SD;
+    this.coherence = coherence;
     this.lastUpdate = lastUpdate;
   }
 
@@ -38,7 +40,8 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
     case 0: return endpoint;
     case 1: return VoID;
     case 2: return SD;
-    case 3: return lastUpdate;
+    case 3: return coherence;
+    case 4: return lastUpdate;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -49,7 +52,8 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
     case 0: endpoint = (sparqles.avro.Endpoint)value$; break;
     case 1: VoID = (java.lang.CharSequence)value$; break;
     case 2: SD = (java.lang.CharSequence)value$; break;
-    case 3: lastUpdate = (java.lang.Long)value$; break;
+    case 3: coherence = (java.lang.Double)value$; break;
+    case 4: lastUpdate = (java.lang.Long)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -100,6 +104,21 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   /**
+   * Gets the value of the 'coherence' field.
+   */
+  public java.lang.Double getCoherence() {
+    return coherence;
+  }
+
+  /**
+   * Sets the value of the 'coherence' field.
+   * @param value the value to set.
+   */
+  public void setCoherence(java.lang.Double value) {
+    this.coherence = value;
+  }
+
+  /**
    * Gets the value of the 'lastUpdate' field.
    */
   public java.lang.Long getLastUpdate() {
@@ -138,6 +157,7 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
     private sparqles.avro.Endpoint endpoint;
     private java.lang.CharSequence VoID;
     private java.lang.CharSequence SD;
+    private double coherence;
     private long lastUpdate;
 
     /** Creates a new Builder */
@@ -160,9 +180,13 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
         this.SD = data().deepCopy(fields()[2].schema(), other.SD);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.lastUpdate)) {
-        this.lastUpdate = data().deepCopy(fields()[3].schema(), other.lastUpdate);
+      if (isValidValue(fields()[3], other.coherence)) {
+        this.coherence = data().deepCopy(fields()[3].schema(), other.coherence);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.lastUpdate)) {
+        this.lastUpdate = data().deepCopy(fields()[4].schema(), other.lastUpdate);
+        fieldSetFlags()[4] = true;
       }
     }
     
@@ -181,9 +205,13 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
         this.SD = data().deepCopy(fields()[2].schema(), other.SD);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.lastUpdate)) {
-        this.lastUpdate = data().deepCopy(fields()[3].schema(), other.lastUpdate);
+      if (isValidValue(fields()[3], other.coherence)) {
+        this.coherence = data().deepCopy(fields()[3].schema(), other.coherence);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.lastUpdate)) {
+        this.lastUpdate = data().deepCopy(fields()[4].schema(), other.lastUpdate);
+        fieldSetFlags()[4] = true;
       }
     }
 
@@ -262,6 +290,30 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
       return this;
     }
 
+    /** Gets the value of the 'coherence' field */
+    public java.lang.Double getCoherence() {
+      return coherence;
+    }
+    
+    /** Sets the value of the 'coherence' field */
+    public sparqles.avro.analytics.Profile.Builder setCoherence(double value) {
+      validate(fields()[3], value);
+      this.coherence = value;
+      fieldSetFlags()[3] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'coherence' field has been set */
+    public boolean hasCoherence() {
+      return fieldSetFlags()[3];
+    }
+    
+    /** Clears the value of the 'coherence' field */
+    public sparqles.avro.analytics.Profile.Builder clearCoherence() {
+      fieldSetFlags()[3] = false;
+      return this;
+    }
+
     /** Gets the value of the 'lastUpdate' field */
     public java.lang.Long getLastUpdate() {
       return lastUpdate;
@@ -269,20 +321,20 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
     
     /** Sets the value of the 'lastUpdate' field */
     public sparqles.avro.analytics.Profile.Builder setLastUpdate(long value) {
-      validate(fields()[3], value);
+      validate(fields()[4], value);
       this.lastUpdate = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[4] = true;
       return this; 
     }
     
     /** Checks whether the 'lastUpdate' field has been set */
     public boolean hasLastUpdate() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[4];
     }
     
     /** Clears the value of the 'lastUpdate' field */
     public sparqles.avro.analytics.Profile.Builder clearLastUpdate() {
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[4] = false;
       return this;
     }
 
@@ -293,7 +345,8 @@ public class Profile extends org.apache.avro.specific.SpecificRecordBase impleme
         record.endpoint = fieldSetFlags()[0] ? this.endpoint : (sparqles.avro.Endpoint) defaultValue(fields()[0]);
         record.VoID = fieldSetFlags()[1] ? this.VoID : (java.lang.CharSequence) defaultValue(fields()[1]);
         record.SD = fieldSetFlags()[2] ? this.SD : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.lastUpdate = fieldSetFlags()[3] ? this.lastUpdate : (java.lang.Long) defaultValue(fields()[3]);
+        record.coherence = fieldSetFlags()[3] ? this.coherence : (java.lang.Double) defaultValue(fields()[3]);
+        record.lastUpdate = fieldSetFlags()[4] ? this.lastUpdate : (java.lang.Long) defaultValue(fields()[4]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

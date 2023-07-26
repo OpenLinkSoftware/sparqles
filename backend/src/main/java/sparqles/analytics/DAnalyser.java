@@ -81,7 +81,7 @@ public class DAnalyser extends Analytics<DResult> {
 
 	@Override
 	public boolean analyse(DResult pres) {
-		log.info("[Analytics] {}",pres);
+		log.info("[Analytics] {}",pres.getEndpointResult().getEndpoint());
 
 		Endpoint ep = pres.getEndpointResult().getEndpoint();
 
@@ -125,7 +125,7 @@ public class DAnalyser extends Analytics<DResult> {
 				dview.setVoID(true);
 			}
 		}
-		log.info("Setting server name to {}",serverName);
+		//log.info("Setting server name to {}",serverName);
 		dview.setServerName(serverName);
 		EPViewDiscoverability depview = epview.getDiscoverability();
 		
@@ -153,14 +153,13 @@ public class DAnalyser extends Analytics<DResult> {
 		//		depview.setSDDescription(l);
 
 		if (dview.getVoID() == false) {
-		    log.info("[CHECK if VoiD has been generated {}]",pres);
-		    //TODO
-		    
 
 		    // if VoID has to be generated
-		    if (true) { 
-			log.info("[GENERATION of VoiD] {}",pres);
-
+		    if (pview.getLastUpdate() > 0) {
+			log.info("[GENERATION of VoiD skipped] {}", pres.getEndpointResult().getEndpoint());
+			dview.setGeneratedVoID(true);
+		    }
+		    else { 
 			// Code for generating a VoID and SPARQL Service Description profile for the endpoint.
 			// author: Milos Jovanovik (@mjovanovik)
 
@@ -200,7 +199,8 @@ public class DAnalyser extends Analytics<DResult> {
 
 			// If the endpoint is accessible, try to gather VoID statistics and generate the profile.
 			if (ping) {
-			    log.info("[Ping value is {}]", ping);
+			    log.info("[GENERATION of VoiD] {}",pres.getEndpointResult().getEndpoint());
+			    //if (false) {
 			    RDFNode n = executeQuery(endpointURL, queryNumberOfTriples);
 			    if (n != null)
 				triples = ((Literal)n).getInt();
@@ -222,7 +222,7 @@ public class DAnalyser extends Analytics<DResult> {
 			    n = executeQuery(endpointURL, queryExampleResource);
 			    if (n != null)
 				exampleResource = ((Resource)n).toString();
-				coherence = calculateCoherence(endpointURL);
+			    coherence = calculateCoherence(endpointURL);
 
 			    Model model = ModelFactory.createDefaultModel();
 			    
@@ -251,7 +251,7 @@ public class DAnalyser extends Analytics<DResult> {
 			    Property foafprimaryTopic = model.createProperty(foafNS + "primaryTopic");
 			    Property voidsparqlEndpoint = model.createProperty(voidNS + "sparqlEndpoint");
 			    Property voidexampleResource = model.createProperty(voidNS + "exampleResource");
-				Property coherenceValue = model.createProperty("https://www.3dfed.com/ontology/coherence");
+			    Property coherenceValue = model.createProperty("https://www.3dfed.com/ontology/coherence");
 
 			    // get current date
 			    LocalDate currentDate = LocalDate.now();
@@ -290,20 +290,25 @@ public class DAnalyser extends Analytics<DResult> {
 			    endpointEntity.addProperty(voiddistinctSubjects, Integer.toString(distinctSubjects));
 			    endpointEntity.addProperty(voiddistinctObjects, Integer.toString(distinctObjects));
 
-				// add the Coherence value for the endpoint
-				endpointEntity.addProperty(coherenceValue, Double.toString(coherence));
+			    // add the Coherence value for the endpoint
+			    endpointEntity.addProperty(coherenceValue, Double.toString(coherence));
 
-				// the profile has been generated, now we persist it
+			    // the profile has been generated, now we persist it
 			    java.io.StringWriter stringModel = new java.io.StringWriter() ;
 			    model.write(stringModel, "TURTLE");
 
 			    pview.setVoID(stringModel.toString());
+			    //}
+			    //pview.setVoID("test1");
 			    pview.setSD("test2");
+			    //pview.setCoherence(0.0);
+			    pview.setCoherence(coherence);
 			    pview.setLastUpdate(System.currentTimeMillis());
 			    
 			    dview.setGeneratedVoID(true);
 			}
 			else {
+			    pview.setLastUpdate(0L);
 			    dview.setGeneratedVoID(false);
 			}			
 		    }
@@ -584,6 +589,7 @@ public class DAnalyser extends Analytics<DResult> {
 			view.setEndpoint(ep);
 			view.setSD("");
 			view.setVoID("");
+			view.setCoherence(-1.0);
 			view.setLastUpdate(-1L);
 			if (_db  != null)
 				_db.insert(view);

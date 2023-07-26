@@ -155,7 +155,9 @@ public class DAnalyser extends Analytics<DResult> {
 		    // if VoID has to be generated
 		    if (true) { 
 			log.info("[GENERATION of VoiD] {}",pres);
-			//TODO
+
+			// Code for generating a VoID and SPARQL Service Description profile for the endpoint.
+			// author: Milos Jovanovik (@mjovanovik)
 
 			int triples = 0;
 			int entities = 0;
@@ -178,14 +180,19 @@ public class DAnalyser extends Analytics<DResult> {
 			    log.info("[Error details: {}]", e.toString());
 			}
 			*/
-			
+
+			// Check if the endpoint is accessible or not.
+			// If not, there's no need to try and generate a VoID profile for it.
 			Boolean ping = false;
+
 			for(QueryInfo info: pres.getQueryInfo()){
 			    if("query-self".contentEquals(info.getOperation())){
 				if (info.getException() == null)
 				    ping = true;
 			    }
 			}
+
+			// If the endpoint is accessible, try to gather VoID statistics and generate the profile.
 			if (ping) {
 			    log.info("[Ping value is {}]", ping);
 			    RDFNode n = executeQuery(endpointURL, queryNumberOfTriples);
@@ -262,9 +269,10 @@ public class DAnalyser extends Analytics<DResult> {
 			    
 			    endpointEntity.addProperty(RDF.type, voidDataset);
 			    endpointEntity.addProperty(voidsparqlEndpoint, endpointEntity);
-			    // TODO
-			    if (exampleResource != "")
-				endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResource));
+			    if (exampleResource != "") endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResource));
+				// VoID supports multiple example resources in the profile.
+				// We currently add only one, for simplicity.
+				// TODO: Add more example resources.
 			    // endpointEntity.addProperty(voidexampleResource, //example resource 2);
 			    // endpointEntity.addProperty(voidexampleResource, //example resource 3);
 			    endpointEntity.addProperty(voidtriples, Integer.toString(triples));
@@ -275,6 +283,8 @@ public class DAnalyser extends Analytics<DResult> {
 			    endpointEntity.addProperty(voiddistinctObjects, Integer.toString(distinctObjects));
 			    
 			    model.write(System.out, "TURTLE");
+
+				// TODO: Persist the created Void + SD profile
 			    
 			    dview.setGeneratedVoID(true);
 			}

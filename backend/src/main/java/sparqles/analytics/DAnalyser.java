@@ -448,7 +448,7 @@ public class DAnalyser extends Analytics<DResult> {
 				types.add(res.next().get("type").toString());
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error executing SPARQL query for {}]", endpoint);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();
@@ -482,7 +482,7 @@ public class DAnalyser extends Analytics<DResult> {
 				typeInstancesSize = Long.parseLong(res.next().get("cnt").asLiteral().getString());
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error executing SPARQL query for {}]", endpoint);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();
@@ -508,7 +508,7 @@ public class DAnalyser extends Analytics<DResult> {
 			}
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error executing SPARQL query for {}]", endpoint);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();
@@ -531,7 +531,7 @@ public class DAnalyser extends Analytics<DResult> {
 				predicateOccurences = Long.parseLong(res.next().get("occurences").asLiteral().getString());
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error executing SPARQL query for {}]", endpoint);
 			log.info("[Error details: {}]", e.toString());
 		}
 		qExec.close();

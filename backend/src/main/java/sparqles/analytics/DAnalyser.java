@@ -442,9 +442,16 @@ public class DAnalyser extends Analytics<DResult> {
 				+ "WHERE { ?s a ?type }" ;
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
-		ResultSet res = qExec.execSelect();
-		while (res.hasNext())
-			types.add(res.next().get("type").toString());
+		try {
+			ResultSet res = qExec.execSelect();
+			while (res.hasNext())
+				types.add(res.next().get("type").toString());
+		}
+		catch (Exception e) {
+			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error details: {}]", e.toString());
+		}
+		qExec.close();
 		return types;
 	}
 
@@ -469,9 +476,16 @@ public class DAnalyser extends Analytics<DResult> {
 			+ "}" ;
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
-		ResultSet res= qExec.execSelect();
-		while(res.hasNext())
-			typeInstancesSize = Long.parseLong(res.next().get("cnt").asLiteral().getString());
+		try {
+			ResultSet res = qExec.execSelect();
+			while (res.hasNext())
+				typeInstancesSize = Long.parseLong(res.next().get("cnt").asLiteral().getString());
+		}
+		catch (Exception e) {
+			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error details: {}]", e.toString());
+		}
+		qExec.close();
 		return typeInstancesSize;
 	}
 
@@ -485,13 +499,19 @@ public class DAnalyser extends Analytics<DResult> {
 			+ "}" ;
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
-		ResultSet res= qExec.execSelect();
-		while(res.hasNext())
-		{
-			String predicate = res.next().get("typePred").toString();
-			if (!predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))
-				typePredicates.add(predicate);
+		try {
+			ResultSet res = qExec.execSelect();
+			while (res.hasNext()) {
+				String predicate = res.next().get("typePred").toString();
+				if (!predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))
+					typePredicates.add(predicate);
+			}
 		}
+		catch (Exception e) {
+			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error details: {}]", e.toString());
+		}
+		qExec.close();
 		return typePredicates;
 	}
 
@@ -505,9 +525,16 @@ public class DAnalyser extends Analytics<DResult> {
 			+ "}" ;
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
-		ResultSet res= qExec.execSelect();
-		while(res.hasNext())
-			predicateOccurences = Long.parseLong(res.next().get("occurences").asLiteral().getString());
+		try {
+			ResultSet res = qExec.execSelect();
+			while (res.hasNext())
+				predicateOccurences = Long.parseLong(res.next().get("occurences").asLiteral().getString());
+		}
+		catch (Exception e) {
+			log.info("[Error executing SPARQL query for {}]", endpointURL);
+			log.info("[Error details: {}]", e.toString());
+		}
+		qExec.close();
 		return predicateOccurences;
 	}
 

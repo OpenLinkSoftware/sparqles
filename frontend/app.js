@@ -181,6 +181,14 @@ app.get('/api/discoverability', function(req, res){
                         else res.end();
                 });
 });
+app.get('/api/profiles', function(req, res){
+               mongoDBProvider.getProfilesView(function(error,docs){
+                        if(docs){
+                                res.json(docs);
+                        }
+                        else res.end();
+                });
+});
 app.get('/api/performance', function(req, res){
                mongoDBProvider.getPerfView(function(error,docs){
                         if(docs){
@@ -278,6 +286,7 @@ app.get('/endpoint', function(req, res){
                   configInterop: JSON.parse(fs.readFileSync('./texts/interoperability.json')),
                   configPerf: JSON.parse(fs.readFileSync('./texts/performance.json')),
                   configDisco: JSON.parse(fs.readFileSync('./texts/discoverability.json')),
+		  configProfiles: JSON.parse(fs.readFileSync('./texts/profiles.json')),
                   epUri: uri,
                   epDetails: /*docs[0].endpoint*/ results[0],
                   epPerf: perfParsed,
@@ -379,6 +388,39 @@ app.get('/discoverability', function(req, res){
 			});
 		});
 });
+
+app.get('/profiles', function(req, res){
+		mongoDBProvider.endpointsCount(function(error,nbEndpointsSearch){
+			mongoDBProvider.getProfilesView( function(error,docs){
+				var lastUpdate=0;
+			        var nbEndpointsVoID=0;
+			        var nbEndpointsSD=0;
+			        var nbEndpointsCoherence=0;
+			        var nbEndpointsRS=0;
+				var nbEndpointsTotal=0;
+				for (i in docs){
+					nbEndpointsTotal++;
+					if(docs[i].lastUpdate>lastUpdate) lastUpdate=docs[i].lastUpdate;
+				        if(docs[i].VoID==true)nbEndpointsVoID++;
+				        if(docs[i].SD==true)nbEndpointsSD++;
+				        if(docs[i].coherence!=-1)nbEndpointsCoherence++;
+    				        if(docs[i].RS!=-1)nbEndpointsRS++;
+				}
+				res.render('content/profiles.jade',{
+					lastUpdate: new Date(lastUpdate).toUTCString(),
+					nbEndpointsSearch:nbEndpointsSearch,
+				        nbEndpointsVoID: nbEndpointsVoID,
+				        nbEndpointsSD: nbEndpointsSD,
+				        nbEndpointsCoherence: nbEndpointsCoherence,
+				        nbEndpointsRS: nbEndpointsRS,
+					nbEndpointsTotal: nbEndpointsTotal,
+					ctasks_agg: docs,
+					configProfiles: JSON.parse(fs.readFileSync('./texts/profiles.json'))
+					});
+			});
+		});
+});
+
 
 app.get('/performance', function(req, res){
 		mongoDBProvider.endpointsCount(function(error,nbEndpointsSearch){

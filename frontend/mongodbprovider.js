@@ -72,6 +72,19 @@ MongoDBProvider.prototype.getDiscoView = function(callback) {
     });
 };
 
+//Profiles
+MongoDBProvider.prototype.getProfilesView = function(callback) {
+    this.getCollection('ctasks_agg',function(error, collection) {
+      if( error ) callback(error)
+      else {
+        collection.find({},{"_id":0}).sort({"endpoint.datasets.0.label":1,"endpoint.uri":1}).toArray(function(error, results) {
+          if( error ) callback(error)
+          else callback(null, results)
+        });
+      }
+    });
+};
+
 //Endpoint view
 MongoDBProvider.prototype.getEndpointView = function(epUri, callback) {
     this.getCollection('epview',function(error, collection) {

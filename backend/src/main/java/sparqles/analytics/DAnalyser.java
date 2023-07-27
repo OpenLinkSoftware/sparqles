@@ -171,6 +171,7 @@ public class DAnalyser extends Analytics<DResult> {
 			int distinctObjects = 0;
 			String exampleResource = "";
 			double coherence = 0.0;
+			double relationshipSpecialty = 0.0;
 
 			/*
 			Query query1 = QueryFactory.create(queryPingEndpoint);
@@ -223,12 +224,19 @@ public class DAnalyser extends Analytics<DResult> {
 			    if (n != null)
 				exampleResource = ((Resource)n).toString();
 			    try {
-				log.info("Coherence calculation...");
-				coherence = calculateCoherence(endpointURL);
+					log.info("Coherence calculation...");
+					coherence = calculateCoherence(endpointURL);
 			    }
 			    catch (Exception e) {
-				log.warn("[Error details: {}]", e.toString());
+					log.warn("[Error details: {}]", e.toString());
 			    }
+				try {
+					log.info("Relationship Specialty calculation...");
+					relationshipSpecialty = calculateRelationshipSpecialty(endpointURL, triples, distinctSubjects);
+				}
+				catch (Exception e) {
+					log.warn("[Error details: {}]", e.toString());
+				}
 
 			    Model model = ModelFactory.createDefaultModel();
 			    
@@ -555,6 +563,89 @@ public class DAnalyser extends Analytics<DResult> {
 		}
 		qExec.close();
 		return predicateOccurences;
+	}
+
+	public double calculateRelationshipSpecialty(String endpoint, int numOfTriples, int numOfSubjects) {
+		Set<String> predicates = getRelationshipPredicates(endpoint);
+		long datasetSize = numOfTriples;
+		long subjects = numOfSubjects;
+		Kurtosis kurt = new Kurtosis();
+		double relationshipSpecialty = 0 ;
+		int i = 1;
+		for (String predicate:predicates){
+			double [] occurences = getOccurences(predicate, endpoint, subjects);
+			double kurtosis = kurt.evaluate(occurences);
+			long tpSize = getPredicateSize(predicate, endpoint, namedGraph);
+			relationshipSpecialty = relationshipSpecialty + (tpSize*kurtosis/datasetSize);
+			i++;
+		}
+		return relationshipSpecialty;
+	}
+
+	public static Set<String> getRelationshipPredicates(String endpoint)  {
+		Set<String> predicates =new HashSet<String>() ;
+		String queryString ;
+		queryString = "SELECT DISTINCT ?p WHERE {?s ?p ?o . FILTER isIRI(?o) } " ;
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+		try {
+			ResultSet res = qExec.execSelect();
+			while(res.hasNext())
+				predicates.add(res.next().get("p").toString());
+		}
+		catch (Exception e) {
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
+		}
+		return predicates;
+	}
+
+	public static double[] getOccurences(String predicate, String endpoint ,long subjects) {
+		double [] occurences = new double[(int) subjects+1];
+		String queryString ;
+		queryString = "SELECT (count(?o) as ?occ) WHERE { ?res <"+predicate+"> ?o . } Group by ?res" ;
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
+		try {
+			ResultSet res = qExec.execSelect();
+			int i = 0;
+			while (res.hasNext()) {
+				occurences[i] = res.next().get("occ").asLiteral().getDouble();
+				i++;
+			}
+			if (i == 0)
+				occurences[0] = 1;
+		}
+		catch (Exception e) {
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
+		}
+		return occurences ;
+	}
+
+	public static long getPredicateSize(String predicate, String endpoint)  {
+		long count = 0;
+		String queryString ="";
+		queryString = ""
+     		+ "SELECT (COUNT (*) as ?total) \n"
+			+ "WHERE { \n"
+			+ "   ?s <"+predicate+"> ?o"
+			+ "}";
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
+		try {
+			ResultSet res = qExec.execSelect();
+			while(res.hasNext())
+				count = Long.parseLong(res.next().get("total").asLiteral().getString());
+		}
+		catch (Exception e) {
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
+		}
+		return count;
 	}
 
 	private DiscoverabilityView getView(Endpoint ep) {

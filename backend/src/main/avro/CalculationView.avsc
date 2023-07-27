@@ -1,0 +1,13 @@
+{
+"namespace": "sparqles.avro.analytics",
+"type": "record",
+"name": "CalculationView",
+"fields": [ 
+	{"name": "endpoint", "type": "sparqles.avro.Endpoint"},
+	{"name": "VoID", "type": "boolean"},
+	{"name": "SD", "type": "boolean"},
+	{"name": "coherence", "type": "double"},
+	{"name": "RS", "type": "double"},
+	{"name": "lastUpdate", "type": "long"}
+]
+}

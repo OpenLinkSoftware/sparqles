@@ -19,6 +19,7 @@ import sparqles.avro.availability.AResult;
 import sparqles.avro.discovery.DResult;
 import sparqles.avro.features.FResult;
 import sparqles.avro.performance.PResult;
+import sparqles.avro.calculation.CResult;
 import sparqles.avro.schedule.Schedule;
 import sparqles.schedule.Scheduler;
 import sparqles.utils.DatahubAccess;
@@ -125,6 +126,10 @@ public class SPARQLES extends CLIObject{
 			else if(task.equalsIgnoreCase(CONSTANTS.DTASK)){
 				OneTimeExecution<DResult> ex = new OneTimeExecution<DResult>(dbm,_fm); 
 				ex.run(CONSTANTS.DTASK);
+			}
+			else if(task.equalsIgnoreCase(CONSTANTS.CTASK)){
+				OneTimeExecution<CResult> ex = new OneTimeExecution<CResult>(dbm,_fm); 
+				ex.run(CONSTANTS.CTASK);
 			}else{
 				log.warn("Task {} not known", task);
 			}

@@ -222,7 +222,13 @@ public class DAnalyser extends Analytics<DResult> {
 			    n = executeQuery(endpointURL, queryExampleResource);
 			    if (n != null)
 				exampleResource = ((Resource)n).toString();
-			    coherence = calculateCoherence(endpointURL);
+			    try {
+				log.info("Coherence calculation...");
+				coherence = calculateCoherence(endpointURL);
+			    }
+			    catch (Exception e) {
+				log.warn("[Error details: {}]", e.toString());
+			    }
 
 			    Model model = ModelFactory.createDefaultModel();
 			    
@@ -420,15 +426,15 @@ public class DAnalyser extends Analytics<DResult> {
 
 	public double calculateCoherence(String endpointUrl) {
 		Set<String> types = getRDFTypes(endpointUrl);
-		if(types.size()==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
+		//if(types.size()==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 		double weightedDenomSum = getTypesWeightedDenomSum(types, endpointUrl);
-		if(weightedDenomSum==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
+		//if(weightedDenomSum==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 		double structuredness = 0;
 		for(String type:types) {
 			long occurenceSum = 0;
 			Set<String> typePredicates = getTypePredicates(type, endpointUrl);
 			long typeInstancesSize = getTypeInstancesSize(type, endpointUrl);
-			if(typeInstancesSize==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
+			//if(typeInstancesSize==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 			for (String predicate:typePredicates)
 			{
 				long predicateOccurences = getOccurences(predicate, type, endpointUrl);
@@ -457,9 +463,9 @@ public class DAnalyser extends Analytics<DResult> {
 				types.add(res.next().get("type").toString());
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpoint);
-			log.info("[SPARQL query: {}]", queryString);
-			log.info("[Error details: {}]", e.toString());
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
 		}
 		qExec.close();
 		return types;
@@ -492,9 +498,9 @@ public class DAnalyser extends Analytics<DResult> {
 				typeInstancesSize = Long.parseLong(res.next().get("cnt").asLiteral().getString());
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpoint);
-			log.info("[SPARQL query: {}]", queryString);
-			log.info("[Error details: {}]", e.toString());
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
 		}
 		qExec.close();
 		return typeInstancesSize;
@@ -519,9 +525,9 @@ public class DAnalyser extends Analytics<DResult> {
 			}
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpoint);
-			log.info("[SPARQL query: {}]", queryString);
-			log.info("[Error details: {}]", e.toString());
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
 		}
 		qExec.close();
 		return typePredicates;
@@ -543,9 +549,9 @@ public class DAnalyser extends Analytics<DResult> {
 				predicateOccurences = Long.parseLong(res.next().get("occurences").asLiteral().getString());
 		}
 		catch (Exception e) {
-			log.info("[Error executing SPARQL query for {}]", endpoint);
-			log.info("[SPARQL query: {}]", queryString);
-			log.info("[Error details: {}]", e.toString());
+			log.warn("[Error executing SPARQL query for {}]", endpoint);
+			log.warn("[SPARQL query: {}]", queryString);
+			throw e;
 		}
 		qExec.close();
 		return predicateOccurences;

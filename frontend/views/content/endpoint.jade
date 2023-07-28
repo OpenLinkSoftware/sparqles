@@ -179,22 +179,28 @@ block content
                       tbody
                         tr
                           td.tdleft VoID Description
-                          td
-                            if VoID == ''
+                          if VoID == ''
+                            td
                               img(src='/images/red.png')
-                            else
+                            td
+                              Missing
+                          else
+                            td
                               img(src='/images/green.png')
-                          td
-                            span(onclick='save(\'VoID.ttl\', \'#{VoID}\');') Download
+                            td
+                              span(onclick='save(\'VoID.ttl\', \'#{VoID}\');') Download
                         tr
                           td.tdleft SD Description
-                          td
-                            if SD == ''
+                          if SD == ''
+                            td
                               img(src='/images/red.png')
-                            else
+                            td
+                              Missing
+                          else
+                            td
                               img(src='/images/green.png')
-                          td
-                            span(onclick='save(\'SD.ttl\', \'#{SD}\');') Download
+                            td
+                              span(onclick='save(\'SD.ttl\', \'#{SD}\');') Download
       script.
         var colors = d3.scale.category20();
         keyColor = function(d, i) {return colors(d.key)};

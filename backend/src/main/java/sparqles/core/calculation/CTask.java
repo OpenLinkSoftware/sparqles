@@ -21,8 +21,14 @@ public class CTask extends EndpointTask<CResult> {
 	log.debug("execute {}", _epURI);
 
 	//TODO:
-	result.setVoID("test1");
-	result.setSD("test2");
+	result.setTriples(0);
+	result.setEntities(0);
+	result.setClasses(0);
+	result.setProperties(0);
+	result.setDistinctSubjects(0);
+	result.setDistinctObjects(0);
+	java.util.List<java.lang.CharSequence> list = new java.util.ArrayList<java.lang.CharSequence>();
+	result.setExampleResources(list);
 	result.setCoherence(0.5);
 	result.setRS(0.3);
 	

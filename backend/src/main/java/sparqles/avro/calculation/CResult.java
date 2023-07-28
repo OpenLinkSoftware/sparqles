@@ -7,11 +7,16 @@ package sparqles.avro.calculation;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class CResult extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CResult\",\"namespace\":\"sparqles.avro.calculation\",\"fields\":[{\"name\":\"endpointResult\",\"type\":{\"type\":\"record\",\"name\":\"EndpointResult\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"start\",\"type\":\"long\"},{\"name\":\"end\",\"type\":\"long\"}],\"import\":\"Endpoint.avsc\"}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"RS\",\"type\":\"double\"}],\"import\":\"EndpointResult.avsc\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CResult\",\"namespace\":\"sparqles.avro.calculation\",\"fields\":[{\"name\":\"endpointResult\",\"type\":{\"type\":\"record\",\"name\":\"EndpointResult\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"start\",\"type\":\"long\"},{\"name\":\"end\",\"type\":\"long\"}],\"import\":\"Endpoint.avsc\"}},{\"name\":\"triples\",\"type\":\"int\"},{\"name\":\"entities\",\"type\":\"int\"},{\"name\":\"classes\",\"type\":\"int\"},{\"name\":\"properties\",\"type\":\"int\"},{\"name\":\"distinctSubjects\",\"type\":\"int\"},{\"name\":\"distinctObjects\",\"type\":\"int\"},{\"name\":\"exampleResources\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"RS\",\"type\":\"double\"}],\"import\":\"EndpointResult.avsc\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public sparqles.avro.EndpointResult endpointResult;
-  @Deprecated public java.lang.CharSequence VoID;
-  @Deprecated public java.lang.CharSequence SD;
+  @Deprecated public int triples;
+  @Deprecated public int entities;
+  @Deprecated public int classes;
+  @Deprecated public int properties;
+  @Deprecated public int distinctSubjects;
+  @Deprecated public int distinctObjects;
+  @Deprecated public java.util.List<java.lang.CharSequence> exampleResources;
   @Deprecated public double coherence;
   @Deprecated public double RS;
 
@@ -25,10 +30,15 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   /**
    * All-args constructor.
    */
-  public CResult(sparqles.avro.EndpointResult endpointResult, java.lang.CharSequence VoID, java.lang.CharSequence SD, java.lang.Double coherence, java.lang.Double RS) {
+  public CResult(sparqles.avro.EndpointResult endpointResult, java.lang.Integer triples, java.lang.Integer entities, java.lang.Integer classes, java.lang.Integer properties, java.lang.Integer distinctSubjects, java.lang.Integer distinctObjects, java.util.List<java.lang.CharSequence> exampleResources, java.lang.Double coherence, java.lang.Double RS) {
     this.endpointResult = endpointResult;
-    this.VoID = VoID;
-    this.SD = SD;
+    this.triples = triples;
+    this.entities = entities;
+    this.classes = classes;
+    this.properties = properties;
+    this.distinctSubjects = distinctSubjects;
+    this.distinctObjects = distinctObjects;
+    this.exampleResources = exampleResources;
     this.coherence = coherence;
     this.RS = RS;
   }
@@ -38,10 +48,15 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return endpointResult;
-    case 1: return VoID;
-    case 2: return SD;
-    case 3: return coherence;
-    case 4: return RS;
+    case 1: return triples;
+    case 2: return entities;
+    case 3: return classes;
+    case 4: return properties;
+    case 5: return distinctSubjects;
+    case 6: return distinctObjects;
+    case 7: return exampleResources;
+    case 8: return coherence;
+    case 9: return RS;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -50,10 +65,15 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: endpointResult = (sparqles.avro.EndpointResult)value$; break;
-    case 1: VoID = (java.lang.CharSequence)value$; break;
-    case 2: SD = (java.lang.CharSequence)value$; break;
-    case 3: coherence = (java.lang.Double)value$; break;
-    case 4: RS = (java.lang.Double)value$; break;
+    case 1: triples = (java.lang.Integer)value$; break;
+    case 2: entities = (java.lang.Integer)value$; break;
+    case 3: classes = (java.lang.Integer)value$; break;
+    case 4: properties = (java.lang.Integer)value$; break;
+    case 5: distinctSubjects = (java.lang.Integer)value$; break;
+    case 6: distinctObjects = (java.lang.Integer)value$; break;
+    case 7: exampleResources = (java.util.List<java.lang.CharSequence>)value$; break;
+    case 8: coherence = (java.lang.Double)value$; break;
+    case 9: RS = (java.lang.Double)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -74,33 +94,108 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   /**
-   * Gets the value of the 'VoID' field.
+   * Gets the value of the 'triples' field.
    */
-  public java.lang.CharSequence getVoID() {
-    return VoID;
+  public java.lang.Integer getTriples() {
+    return triples;
   }
 
   /**
-   * Sets the value of the 'VoID' field.
+   * Sets the value of the 'triples' field.
    * @param value the value to set.
    */
-  public void setVoID(java.lang.CharSequence value) {
-    this.VoID = value;
+  public void setTriples(java.lang.Integer value) {
+    this.triples = value;
   }
 
   /**
-   * Gets the value of the 'SD' field.
+   * Gets the value of the 'entities' field.
    */
-  public java.lang.CharSequence getSD() {
-    return SD;
+  public java.lang.Integer getEntities() {
+    return entities;
   }
 
   /**
-   * Sets the value of the 'SD' field.
+   * Sets the value of the 'entities' field.
    * @param value the value to set.
    */
-  public void setSD(java.lang.CharSequence value) {
-    this.SD = value;
+  public void setEntities(java.lang.Integer value) {
+    this.entities = value;
+  }
+
+  /**
+   * Gets the value of the 'classes' field.
+   */
+  public java.lang.Integer getClasses() {
+    return classes;
+  }
+
+  /**
+   * Sets the value of the 'classes' field.
+   * @param value the value to set.
+   */
+  public void setClasses(java.lang.Integer value) {
+    this.classes = value;
+  }
+
+  /**
+   * Gets the value of the 'properties' field.
+   */
+  public java.lang.Integer getProperties() {
+    return properties;
+  }
+
+  /**
+   * Sets the value of the 'properties' field.
+   * @param value the value to set.
+   */
+  public void setProperties(java.lang.Integer value) {
+    this.properties = value;
+  }
+
+  /**
+   * Gets the value of the 'distinctSubjects' field.
+   */
+  public java.lang.Integer getDistinctSubjects() {
+    return distinctSubjects;
+  }
+
+  /**
+   * Sets the value of the 'distinctSubjects' field.
+   * @param value the value to set.
+   */
+  public void setDistinctSubjects(java.lang.Integer value) {
+    this.distinctSubjects = value;
+  }
+
+  /**
+   * Gets the value of the 'distinctObjects' field.
+   */
+  public java.lang.Integer getDistinctObjects() {
+    return distinctObjects;
+  }
+
+  /**
+   * Sets the value of the 'distinctObjects' field.
+   * @param value the value to set.
+   */
+  public void setDistinctObjects(java.lang.Integer value) {
+    this.distinctObjects = value;
+  }
+
+  /**
+   * Gets the value of the 'exampleResources' field.
+   */
+  public java.util.List<java.lang.CharSequence> getExampleResources() {
+    return exampleResources;
+  }
+
+  /**
+   * Sets the value of the 'exampleResources' field.
+   * @param value the value to set.
+   */
+  public void setExampleResources(java.util.List<java.lang.CharSequence> value) {
+    this.exampleResources = value;
   }
 
   /**
@@ -155,8 +250,13 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     implements org.apache.avro.data.RecordBuilder<CResult> {
 
     private sparqles.avro.EndpointResult endpointResult;
-    private java.lang.CharSequence VoID;
-    private java.lang.CharSequence SD;
+    private int triples;
+    private int entities;
+    private int classes;
+    private int properties;
+    private int distinctSubjects;
+    private int distinctObjects;
+    private java.util.List<java.lang.CharSequence> exampleResources;
     private double coherence;
     private double RS;
 
@@ -172,21 +272,41 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
         this.endpointResult = data().deepCopy(fields()[0].schema(), other.endpointResult);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.VoID)) {
-        this.VoID = data().deepCopy(fields()[1].schema(), other.VoID);
+      if (isValidValue(fields()[1], other.triples)) {
+        this.triples = data().deepCopy(fields()[1].schema(), other.triples);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.SD)) {
-        this.SD = data().deepCopy(fields()[2].schema(), other.SD);
+      if (isValidValue(fields()[2], other.entities)) {
+        this.entities = data().deepCopy(fields()[2].schema(), other.entities);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.coherence)) {
-        this.coherence = data().deepCopy(fields()[3].schema(), other.coherence);
+      if (isValidValue(fields()[3], other.classes)) {
+        this.classes = data().deepCopy(fields()[3].schema(), other.classes);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.RS)) {
-        this.RS = data().deepCopy(fields()[4].schema(), other.RS);
+      if (isValidValue(fields()[4], other.properties)) {
+        this.properties = data().deepCopy(fields()[4].schema(), other.properties);
         fieldSetFlags()[4] = true;
+      }
+      if (isValidValue(fields()[5], other.distinctSubjects)) {
+        this.distinctSubjects = data().deepCopy(fields()[5].schema(), other.distinctSubjects);
+        fieldSetFlags()[5] = true;
+      }
+      if (isValidValue(fields()[6], other.distinctObjects)) {
+        this.distinctObjects = data().deepCopy(fields()[6].schema(), other.distinctObjects);
+        fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.exampleResources)) {
+        this.exampleResources = data().deepCopy(fields()[7].schema(), other.exampleResources);
+        fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.coherence)) {
+        this.coherence = data().deepCopy(fields()[8].schema(), other.coherence);
+        fieldSetFlags()[8] = true;
+      }
+      if (isValidValue(fields()[9], other.RS)) {
+        this.RS = data().deepCopy(fields()[9].schema(), other.RS);
+        fieldSetFlags()[9] = true;
       }
     }
     
@@ -197,21 +317,41 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
         this.endpointResult = data().deepCopy(fields()[0].schema(), other.endpointResult);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.VoID)) {
-        this.VoID = data().deepCopy(fields()[1].schema(), other.VoID);
+      if (isValidValue(fields()[1], other.triples)) {
+        this.triples = data().deepCopy(fields()[1].schema(), other.triples);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.SD)) {
-        this.SD = data().deepCopy(fields()[2].schema(), other.SD);
+      if (isValidValue(fields()[2], other.entities)) {
+        this.entities = data().deepCopy(fields()[2].schema(), other.entities);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.coherence)) {
-        this.coherence = data().deepCopy(fields()[3].schema(), other.coherence);
+      if (isValidValue(fields()[3], other.classes)) {
+        this.classes = data().deepCopy(fields()[3].schema(), other.classes);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.RS)) {
-        this.RS = data().deepCopy(fields()[4].schema(), other.RS);
+      if (isValidValue(fields()[4], other.properties)) {
+        this.properties = data().deepCopy(fields()[4].schema(), other.properties);
         fieldSetFlags()[4] = true;
+      }
+      if (isValidValue(fields()[5], other.distinctSubjects)) {
+        this.distinctSubjects = data().deepCopy(fields()[5].schema(), other.distinctSubjects);
+        fieldSetFlags()[5] = true;
+      }
+      if (isValidValue(fields()[6], other.distinctObjects)) {
+        this.distinctObjects = data().deepCopy(fields()[6].schema(), other.distinctObjects);
+        fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.exampleResources)) {
+        this.exampleResources = data().deepCopy(fields()[7].schema(), other.exampleResources);
+        fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.coherence)) {
+        this.coherence = data().deepCopy(fields()[8].schema(), other.coherence);
+        fieldSetFlags()[8] = true;
+      }
+      if (isValidValue(fields()[9], other.RS)) {
+        this.RS = data().deepCopy(fields()[9].schema(), other.RS);
+        fieldSetFlags()[9] = true;
       }
     }
 
@@ -240,53 +380,172 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
       return this;
     }
 
-    /** Gets the value of the 'VoID' field */
-    public java.lang.CharSequence getVoID() {
-      return VoID;
+    /** Gets the value of the 'triples' field */
+    public java.lang.Integer getTriples() {
+      return triples;
     }
     
-    /** Sets the value of the 'VoID' field */
-    public sparqles.avro.calculation.CResult.Builder setVoID(java.lang.CharSequence value) {
+    /** Sets the value of the 'triples' field */
+    public sparqles.avro.calculation.CResult.Builder setTriples(int value) {
       validate(fields()[1], value);
-      this.VoID = value;
+      this.triples = value;
       fieldSetFlags()[1] = true;
       return this; 
     }
     
-    /** Checks whether the 'VoID' field has been set */
-    public boolean hasVoID() {
+    /** Checks whether the 'triples' field has been set */
+    public boolean hasTriples() {
       return fieldSetFlags()[1];
     }
     
-    /** Clears the value of the 'VoID' field */
-    public sparqles.avro.calculation.CResult.Builder clearVoID() {
-      VoID = null;
+    /** Clears the value of the 'triples' field */
+    public sparqles.avro.calculation.CResult.Builder clearTriples() {
       fieldSetFlags()[1] = false;
       return this;
     }
 
-    /** Gets the value of the 'SD' field */
-    public java.lang.CharSequence getSD() {
-      return SD;
+    /** Gets the value of the 'entities' field */
+    public java.lang.Integer getEntities() {
+      return entities;
     }
     
-    /** Sets the value of the 'SD' field */
-    public sparqles.avro.calculation.CResult.Builder setSD(java.lang.CharSequence value) {
+    /** Sets the value of the 'entities' field */
+    public sparqles.avro.calculation.CResult.Builder setEntities(int value) {
       validate(fields()[2], value);
-      this.SD = value;
+      this.entities = value;
       fieldSetFlags()[2] = true;
       return this; 
     }
     
-    /** Checks whether the 'SD' field has been set */
-    public boolean hasSD() {
+    /** Checks whether the 'entities' field has been set */
+    public boolean hasEntities() {
       return fieldSetFlags()[2];
     }
     
-    /** Clears the value of the 'SD' field */
-    public sparqles.avro.calculation.CResult.Builder clearSD() {
-      SD = null;
+    /** Clears the value of the 'entities' field */
+    public sparqles.avro.calculation.CResult.Builder clearEntities() {
       fieldSetFlags()[2] = false;
+      return this;
+    }
+
+    /** Gets the value of the 'classes' field */
+    public java.lang.Integer getClasses() {
+      return classes;
+    }
+    
+    /** Sets the value of the 'classes' field */
+    public sparqles.avro.calculation.CResult.Builder setClasses(int value) {
+      validate(fields()[3], value);
+      this.classes = value;
+      fieldSetFlags()[3] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'classes' field has been set */
+    public boolean hasClasses() {
+      return fieldSetFlags()[3];
+    }
+    
+    /** Clears the value of the 'classes' field */
+    public sparqles.avro.calculation.CResult.Builder clearClasses() {
+      fieldSetFlags()[3] = false;
+      return this;
+    }
+
+    /** Gets the value of the 'properties' field */
+    public java.lang.Integer getProperties() {
+      return properties;
+    }
+    
+    /** Sets the value of the 'properties' field */
+    public sparqles.avro.calculation.CResult.Builder setProperties(int value) {
+      validate(fields()[4], value);
+      this.properties = value;
+      fieldSetFlags()[4] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'properties' field has been set */
+    public boolean hasProperties() {
+      return fieldSetFlags()[4];
+    }
+    
+    /** Clears the value of the 'properties' field */
+    public sparqles.avro.calculation.CResult.Builder clearProperties() {
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
+    /** Gets the value of the 'distinctSubjects' field */
+    public java.lang.Integer getDistinctSubjects() {
+      return distinctSubjects;
+    }
+    
+    /** Sets the value of the 'distinctSubjects' field */
+    public sparqles.avro.calculation.CResult.Builder setDistinctSubjects(int value) {
+      validate(fields()[5], value);
+      this.distinctSubjects = value;
+      fieldSetFlags()[5] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'distinctSubjects' field has been set */
+    public boolean hasDistinctSubjects() {
+      return fieldSetFlags()[5];
+    }
+    
+    /** Clears the value of the 'distinctSubjects' field */
+    public sparqles.avro.calculation.CResult.Builder clearDistinctSubjects() {
+      fieldSetFlags()[5] = false;
+      return this;
+    }
+
+    /** Gets the value of the 'distinctObjects' field */
+    public java.lang.Integer getDistinctObjects() {
+      return distinctObjects;
+    }
+    
+    /** Sets the value of the 'distinctObjects' field */
+    public sparqles.avro.calculation.CResult.Builder setDistinctObjects(int value) {
+      validate(fields()[6], value);
+      this.distinctObjects = value;
+      fieldSetFlags()[6] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'distinctObjects' field has been set */
+    public boolean hasDistinctObjects() {
+      return fieldSetFlags()[6];
+    }
+    
+    /** Clears the value of the 'distinctObjects' field */
+    public sparqles.avro.calculation.CResult.Builder clearDistinctObjects() {
+      fieldSetFlags()[6] = false;
+      return this;
+    }
+
+    /** Gets the value of the 'exampleResources' field */
+    public java.util.List<java.lang.CharSequence> getExampleResources() {
+      return exampleResources;
+    }
+    
+    /** Sets the value of the 'exampleResources' field */
+    public sparqles.avro.calculation.CResult.Builder setExampleResources(java.util.List<java.lang.CharSequence> value) {
+      validate(fields()[7], value);
+      this.exampleResources = value;
+      fieldSetFlags()[7] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'exampleResources' field has been set */
+    public boolean hasExampleResources() {
+      return fieldSetFlags()[7];
+    }
+    
+    /** Clears the value of the 'exampleResources' field */
+    public sparqles.avro.calculation.CResult.Builder clearExampleResources() {
+      exampleResources = null;
+      fieldSetFlags()[7] = false;
       return this;
     }
 
@@ -297,20 +556,20 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     
     /** Sets the value of the 'coherence' field */
     public sparqles.avro.calculation.CResult.Builder setCoherence(double value) {
-      validate(fields()[3], value);
+      validate(fields()[8], value);
       this.coherence = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[8] = true;
       return this; 
     }
     
     /** Checks whether the 'coherence' field has been set */
     public boolean hasCoherence() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[8];
     }
     
     /** Clears the value of the 'coherence' field */
     public sparqles.avro.calculation.CResult.Builder clearCoherence() {
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[8] = false;
       return this;
     }
 
@@ -321,20 +580,20 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     
     /** Sets the value of the 'RS' field */
     public sparqles.avro.calculation.CResult.Builder setRS(double value) {
-      validate(fields()[4], value);
+      validate(fields()[9], value);
       this.RS = value;
-      fieldSetFlags()[4] = true;
+      fieldSetFlags()[9] = true;
       return this; 
     }
     
     /** Checks whether the 'RS' field has been set */
     public boolean hasRS() {
-      return fieldSetFlags()[4];
+      return fieldSetFlags()[9];
     }
     
     /** Clears the value of the 'RS' field */
     public sparqles.avro.calculation.CResult.Builder clearRS() {
-      fieldSetFlags()[4] = false;
+      fieldSetFlags()[9] = false;
       return this;
     }
 
@@ -343,10 +602,15 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
       try {
         CResult record = new CResult();
         record.endpointResult = fieldSetFlags()[0] ? this.endpointResult : (sparqles.avro.EndpointResult) defaultValue(fields()[0]);
-        record.VoID = fieldSetFlags()[1] ? this.VoID : (java.lang.CharSequence) defaultValue(fields()[1]);
-        record.SD = fieldSetFlags()[2] ? this.SD : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.coherence = fieldSetFlags()[3] ? this.coherence : (java.lang.Double) defaultValue(fields()[3]);
-        record.RS = fieldSetFlags()[4] ? this.RS : (java.lang.Double) defaultValue(fields()[4]);
+        record.triples = fieldSetFlags()[1] ? this.triples : (java.lang.Integer) defaultValue(fields()[1]);
+        record.entities = fieldSetFlags()[2] ? this.entities : (java.lang.Integer) defaultValue(fields()[2]);
+        record.classes = fieldSetFlags()[3] ? this.classes : (java.lang.Integer) defaultValue(fields()[3]);
+        record.properties = fieldSetFlags()[4] ? this.properties : (java.lang.Integer) defaultValue(fields()[4]);
+        record.distinctSubjects = fieldSetFlags()[5] ? this.distinctSubjects : (java.lang.Integer) defaultValue(fields()[5]);
+        record.distinctObjects = fieldSetFlags()[6] ? this.distinctObjects : (java.lang.Integer) defaultValue(fields()[6]);
+        record.exampleResources = fieldSetFlags()[7] ? this.exampleResources : (java.util.List<java.lang.CharSequence>) defaultValue(fields()[7]);
+        record.coherence = fieldSetFlags()[8] ? this.coherence : (java.lang.Double) defaultValue(fields()[8]);
+        record.RS = fieldSetFlags()[9] ? this.RS : (java.lang.Double) defaultValue(fields()[9]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

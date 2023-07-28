@@ -5,8 +5,19 @@
  	"name": "CResult",
  	"fields": [
     	{"name": "endpointResult", "type": "sparqles.avro.EndpointResult"},
-	{"name": "VoID", "type": "string"},
-	{"name": "SD", "type": "string"},
+	{"name": "triples", "type": "int"},
+	{"name": "entities", "type": "int"},
+	{"name": "classes", "type": "int"},
+	{"name": "properties", "type": "int"},
+	{"name": "distinctSubjects", "type": "int"},
+	{"name": "distinctObjects", "type": "int"},
+	{"name": "exampleResources", "type":
+    	    {"type": "array", "items": 
+    		{	
+		    "name": "uri", "type": "string"
+      		}
+      	    }
+	},
 	{"name": "coherence", "type": "double"},
 	{"name": "RS", "type": "double"}
  	]

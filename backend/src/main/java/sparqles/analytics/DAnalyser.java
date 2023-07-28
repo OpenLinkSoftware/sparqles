@@ -29,6 +29,7 @@ import com.hp.hpl.jena.vocabulary.*;
 import com.hp.hpl.jena.query.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.apache.commons.math3.stat.descriptive.moment.Kurtosis;
 //import org.apache.jena.rdf.model.*;
 //import org.apache.jena.sparql.resultset.JSONOutput;
 
@@ -575,7 +576,8 @@ public class DAnalyser extends Analytics<DResult> {
 		for (String predicate:predicates){
 			double [] occurences = getOccurences(predicate, endpoint, subjects);
 			double kurtosis = kurt.evaluate(occurences);
-			long tpSize = getPredicateSize(predicate, endpoint, namedGraph);
+			//long tpSize = getPredicateSize(predicate, endpoint, namedGraph);
+			long tpSize = getPredicateSize(predicate, endpoint);
 			relationshipSpecialty = relationshipSpecialty + (tpSize*kurtosis/datasetSize);
 			i++;
 		}

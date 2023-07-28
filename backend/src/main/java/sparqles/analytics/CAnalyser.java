@@ -28,8 +28,8 @@ public class CAnalyser extends Analytics<CResult> {
 
 		CalculationView cview= getView(ep);
 
-		cview.setVoID(pres.getVoID()!="");
-		cview.setSD(pres.getSD()!="");
+		cview.setVoID(true);
+		cview.setSD(false);
 		cview.setCoherence(pres.getCoherence());
 		cview.setRS(pres.getRS());
 

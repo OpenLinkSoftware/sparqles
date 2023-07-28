@@ -291,7 +291,10 @@ app.get('/endpoint', function(req, res){
 			exampleResources: latestProfile[0].exampleResources,
 			coherence: latestProfile[0].coherence,
 			RS: latestProfile[0].RS
-		    }
+		    };
+		    var VoID = latestProfile[0].VoID;
+		    var SD = latestProfile[0].SD;
+
 		    
                     res.render('content/endpoint.jade',{
 			ep: ep,
@@ -307,7 +310,9 @@ app.get('/endpoint', function(req, res){
 			epAvail: docs[0].availability,
 			epInterop: docs[0].interoperability,
 			epDisco: docs[0].discoverability,
-			epProfile: epProfile
+			epProfile: epProfile,
+			VoID: VoID,
+			SD: SD
                     });
 	        });
               });

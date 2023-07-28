@@ -29,6 +29,8 @@ public class CTask extends EndpointTask<CResult> {
 	result.setDistinctObjects(0);
 	java.util.List<java.lang.CharSequence> list = new java.util.ArrayList<java.lang.CharSequence>();
 	result.setExampleResources(list);
+	result.setVoID("test");
+	result.setSD("");
 	result.setCoherence(0.5);
 	result.setRS(0.3);
 	

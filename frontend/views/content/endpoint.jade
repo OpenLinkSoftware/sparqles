@@ -156,7 +156,7 @@ block content
                       thead
                         tr
                           th.tablehead 
-                            span(onmouseover='tooltip.show(\'#{configProfiles["VoID Description"]}\')', onmouseout='tooltip.hide();') Statistics
+                            span(onmouseover='tooltip.show(\'#{configProfiles["Statistics"]}\')', onmouseout='tooltip.hide();') Statistics
                           th.tablehead 
                       tbody
                         - each y, x in epProfile
@@ -180,15 +180,21 @@ block content
                         tr
                           td.tdleft VoID Description
                           td
-                            img(src='/images/red.png')
+                            if VoID == ''
+                              img(src='/images/red.png')
+                            else
+                              img(src='/images/green.png')
                           td
-                            a(href="") Download
+                            span(onclick='save(\'VoID.ttl\', \'#{VoID}\');') Download
                         tr
                           td.tdleft SD Description
                           td
-                            img(src='/images/red.png')
+                            if SD == ''
+                              img(src='/images/red.png')
+                            else
+                              img(src='/images/green.png')
                           td
-                            a(href="") Download
+                            span(onclick='save(\'SD.ttl\', \'#{SD}\');') Download
       script.
         var colors = d3.scale.category20();
         keyColor = function(d, i) {return colors(d.key)};
@@ -255,3 +261,17 @@ block content
           chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
           return chart;
         });
+        function save(filename, data) {
+          const blob = new Blob([data], {type: 'text/csv'});
+          if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, filename);
+          }
+          else{
+            const elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = filename;        
+            document.body.appendChild(elem);
+            elem.click();        
+            document.body.removeChild(elem);
+          }
+        }

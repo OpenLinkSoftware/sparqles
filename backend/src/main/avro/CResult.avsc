@@ -18,6 +18,8 @@
       		}
       	    }
 	},
+	{"name": "VoID", "type": "string"},
+	{"name": "SD", "type": "string"},
 	{"name": "coherence", "type": "double"},
 	{"name": "RS", "type": "double"}
  	]

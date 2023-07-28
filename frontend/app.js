@@ -279,22 +279,37 @@ app.get('/endpoint', function(req, res){
 
                 docs[0].discoverability.SDDescription = SDDescription;
 
-                res.render('content/endpoint.jade',{
-                  ep: ep,
-                  nbEndpointsSearch:nbEndpointsSearch,
-                  lastUpdate: uri,
-                  configInterop: JSON.parse(fs.readFileSync('./texts/interoperability.json')),
-                  configPerf: JSON.parse(fs.readFileSync('./texts/performance.json')),
-                  configDisco: JSON.parse(fs.readFileSync('./texts/discoverability.json')),
-		  configProfiles: JSON.parse(fs.readFileSync('./texts/profiles.json')),
-                  epUri: uri,
-                  epDetails: /*docs[0].endpoint*/ results[0],
-                  epPerf: perfParsed,
-                  epAvail: docs[0].availability,
-                  epInterop: docs[0].interoperability,
-                  epDisco: docs[0].discoverability
-                });
+                mongoDBProvider.getLatestProfile(uri, function(error, latestProfile) {
 
+		    var epProfile = {
+			triples: latestProfile[0].triples,
+			entities: latestProfile[0].entities,
+			classes: latestProfile[0].classes,
+			properties: latestProfile[0].properties,
+			distinctSubjects: latestProfile[0].distinctSubjects,
+			distinctObjects: latestProfile[0].distinctObjects,
+			exampleResources: latestProfile[0].exampleResources,
+			coherence: latestProfile[0].coherence,
+			RS: latestProfile[0].RS
+		    }
+		    
+                    res.render('content/endpoint.jade',{
+			ep: ep,
+			nbEndpointsSearch:nbEndpointsSearch,
+			lastUpdate: uri,
+			configInterop: JSON.parse(fs.readFileSync('./texts/interoperability.json')),
+			configPerf: JSON.parse(fs.readFileSync('./texts/performance.json')),
+			configDisco: JSON.parse(fs.readFileSync('./texts/discoverability.json')),
+			configProfiles: JSON.parse(fs.readFileSync('./texts/profiles.json')),
+			epUri: uri,
+			epDetails: /*docs[0].endpoint*/ results[0],
+			epPerf: perfParsed,
+			epAvail: docs[0].availability,
+			epInterop: docs[0].interoperability,
+			epDisco: docs[0].discoverability,
+			epProfile: epProfile
+                    });
+	        });
               });
 
             });

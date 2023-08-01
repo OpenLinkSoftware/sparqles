@@ -293,7 +293,9 @@ app.get('/endpoint', function(req, res){
 			RS: latestProfile[0].RS
 		    };
 		    var VoID = latestProfile[0].VoID;
+		    var VoIDPart = latestProfile[0].VoIDPart;
 		    var SD = latestProfile[0].SD;
+		    var SDPart = latestProfile[0].SDPart;
 
 		    
                     res.render('content/endpoint.jade',{
@@ -312,7 +314,9 @@ app.get('/endpoint', function(req, res){
 			epDisco: docs[0].discoverability,
 			epProfile: epProfile,
 			VoID: VoID,
-			SD: SD
+			VoIDPart: VoIDPart,
+			SD: SD,
+			SDPart: SDPart
                     });
 	        });
               });
@@ -414,7 +418,9 @@ app.get('/profiles', function(req, res){
 			mongoDBProvider.getProfilesView( function(error,docs){
 				var lastUpdate=0;
 			        var nbEndpointsVoID=0;
+			        var nbEndpointsVoIDPart=0;
 			        var nbEndpointsSD=0;
+			        var nbEndpointsSDPart=0;
 			        var nbEndpointsCoherence=0;
 			        var nbEndpointsRS=0;
 				var nbEndpointsTotal=0;
@@ -422,7 +428,9 @@ app.get('/profiles', function(req, res){
 					nbEndpointsTotal++;
 					if(docs[i].lastUpdate>lastUpdate) lastUpdate=docs[i].lastUpdate;
 				        if(docs[i].VoID==true)nbEndpointsVoID++;
+				        if(docs[i].VoIDPart==true)nbEndpointsVoIDPart++;
 				        if(docs[i].SD==true)nbEndpointsSD++;
+				        if(docs[i].SDPart==true)nbEndpointsSDPart++;
 				        if(docs[i].coherence!=-1)nbEndpointsCoherence++;
     				        if(docs[i].RS!=-1)nbEndpointsRS++;
 				}
@@ -430,7 +438,9 @@ app.get('/profiles', function(req, res){
 					lastUpdate: new Date(lastUpdate).toUTCString(),
 					nbEndpointsSearch:nbEndpointsSearch,
 				        nbEndpointsVoID: nbEndpointsVoID,
+				        nbEndpointsVoIDPart: nbEndpointsVoIDPart,
 				        nbEndpointsSD: nbEndpointsSD,
+				        nbEndpointsSDPart: nbEndpointsSDPart,
 				        nbEndpointsCoherence: nbEndpointsCoherence,
 				        nbEndpointsRS: nbEndpointsRS,
 					nbEndpointsTotal: nbEndpointsTotal,

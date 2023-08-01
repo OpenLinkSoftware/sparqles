@@ -19,7 +19,9 @@
       	    }
 	},
 	{"name": "VoID", "type": "string"},
+	{"name": "VoIDPart", "type": "boolean"},
 	{"name": "SD", "type": "string"},
+	{"name": "SDPart", "type": "boolean"},
 	{"name": "coherence", "type": "double"},
 	{"name": "RS", "type": "double"}
  	]

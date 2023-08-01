@@ -19,9 +19,17 @@ block content
               | (#{nbEndpointsVoID}/#{nbEndpointsTotal}) of the endpoints have a 
               b calculated VoID descriptions
             div
+              b #{parseFloat((nbEndpointsVoIDPart/nbEndpointsTotal*100).toFixed(2))+ '%'} 
+              | (#{nbEndpointsVoIDPart}/#{nbEndpointsTotal}) of the endpoints have a 
+              b partially calculated VoID descriptions
+            div
               b #{parseFloat((nbEndpointsSD/nbEndpointsTotal*100).toFixed(2))+ '%'} 
               | (#{nbEndpointsSD}/#{nbEndpointsTotal}) of the endpoints have a 
               b calculated Service description
+            div
+              b #{parseFloat((nbEndpointsSDPart/nbEndpointsTotal*100).toFixed(2))+ '%'} 
+              | (#{nbEndpointsSDPart}/#{nbEndpointsTotal}) of the endpoints have a 
+              b partially calculated Service description
             div
               b #{parseFloat((nbEndpointsCoherence/nbEndpointsTotal*100).toFixed(2))+ '%'} 
               | (#{nbEndpointsCoherence}/#{nbEndpointsTotal}) of the endpoints have a 
@@ -36,6 +44,9 @@ block content
               .wrpl(style='padding-left: 2em;')
                 img(src='/images/green.png')
                 span(style='padding-left: 0.75em;') Description available
+              .wrpl(style='padding-left: 2em;')
+                img(src='/images/orange.png')
+                span(style='padding-left: 0.75em;') Description partially avaialable
               .wrpl(style='padding-left: 2em;')
                 img(src='/images/gray.png')
                 span(style='padding-left: 0.75em;') Description not available
@@ -77,15 +88,21 @@ block content
                     if ep.VoID
                       td.tdcenter(sorttable_customkey="1")
                         img(src='/images/green.png')
-                    else
+                    else if ep.VoIDPart
                       td.tdcenter(sorttable_customkey="2")
+                        img(src='/images/orange.png')
+                    else
+                      td.tdcenter(sorttable_customkey="3")
                         img(src='/images/gray.png')
                     //-Display SD Description 
                     if ep.SD
                       td.tdcenter(sorttable_customkey="1")
                         img(src='/images/green.png')
-                    else
+                    else if ep.SDPart
                       td.tdcenter(sorttable_customkey="2")
+                        img(src='/images/orange.png')
+                    else
+                      td.tdcenter(sorttable_customkey="3")
                         img(src='/images/gray.png')
                     //-Display Coherence
                     td.tdcenter

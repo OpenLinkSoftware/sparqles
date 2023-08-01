@@ -90,23 +90,25 @@ public class CTask extends EndpointTask<CResult> {
     public CResult process(EndpointResult epr) {
 	CResult result = new CResult();
 	result.setEndpointResult(epr);
-	log.debug("execute {}", _epURI);
+	log.info("### execute {}", _epURI);
 
 	// Code for generating a VoID and SPARQL Service Description profile for the endpoint.
 	// author: Milos Jovanovik (@mjovanovik)
 	
-	int triples = 0;
-	int entities = 0;
-	int classes = 0;
-	int properties = 0;
-	int distinctSubjects = 0;
-	int distinctObjects = 0;
+	int triples = -1;
+	int entities = -1;
+	int classes = -1;
+	int properties = -1;
+	int distinctSubjects = -1;
+	int distinctObjects = -1;
 	String exampleResource = "";
 	java.util.List<java.lang.CharSequence> exampleResourceList = new java.util.ArrayList<>();
 	String VoID = "";
+	boolean VoIDPart = false;
 	String SD = "";
-	double coherence = 0.0;
-	double relationshipSpecialty = 0.0;
+	boolean SDPart = false;
+	double coherence = -1.0;
+	double relationshipSpecialty = -1.0;
 
 	// Check if the endpoint is accessible or not.
 	// If not, there's no need to try and generate a VoID profile for it.
@@ -129,34 +131,48 @@ public class CTask extends EndpointTask<CResult> {
 	    RDFNode n = executeQuery(_epURI, queryNumberOfTriples);
 	    if (n != null)
 		triples = ((Literal)n).getInt();
+	    else
+		VoIDPart = true;
 	    n = executeQuery(_epURI, queryNumberOfEntities);
 	    if (n != null)
 		entities = ((Literal)n).getInt();
+	    else
+		VoIDPart = true;
 	    n = executeQuery(_epURI, queryNumberOfClasses);
 	    if (n != null)
 		classes = ((Literal)n).getInt();
+	    else
+		VoIDPart = true;
 	    n = executeQuery(_epURI, queryNumberOfProperties);
 	    if (n != null)
 		properties = ((Literal)n).getInt();
+	    else
+		VoIDPart = true;
 	    n = executeQuery(_epURI, queryNumberOfSubjects);
 	    if (n != null)
 		distinctSubjects = ((Literal)n).getInt();
+	    else
+		VoIDPart = true;
 	    n = executeQuery(_epURI, queryNumberOfObjects);
 	    if (n != null)
 		distinctObjects = ((Literal)n).getInt();
+	    else
+		VoIDPart = true;
 	    n = executeQuery(_epURI, queryExampleResource);
 	    if (n != null)
 		exampleResource = ((Resource)n).toString();
+	    else
+		VoIDPart = true;
 	    try {
-		log.info("Coherence calculation...");
+		log.info("Coherence calculation for {} ...", _epURI);
 		coherence = calculateCoherence(_epURI);
 	    }
 	    catch (Exception e) {
 		log.warn("[Error details: {}]", e.toString());
 	    }
 	    try {
-		log.info("Relationship Specialty calculation...");
-		relationshipSpecialty = calculateRelationshipSpecialty(_epURI, triples, distinctSubjects);
+		log.info("Relationship Specialty calculation {} ...", _epURI);
+		//relationshipSpecialty = calculateRelationshipSpecialty(_epURI, triples, distinctSubjects);
 	    }
 	    catch (Exception e) {
 		log.warn("[Error details: {}]", e.toString());
@@ -247,11 +263,13 @@ public class CTask extends EndpointTask<CResult> {
 	exampleResourceList.add(exampleResource);
 	result.setExampleResources(exampleResourceList);
 	result.setVoID(VoID);
+	result.setVoIDPart(VoIDPart);
 	result.setSD(SD);
+	result.setSDPart(SDPart);
 	result.setCoherence(coherence);
 	result.setRS(relationshipSpecialty);	    
 	
-	log.info("executed {}", this);
+	log.info("$$$ executed {}", this);
 	
 	return result;
     }

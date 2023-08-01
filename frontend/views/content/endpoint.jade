@@ -186,7 +186,10 @@ block content
                               Missing
                           else
                             td
-                              img(src='/images/green.png')
+                              if VoIDPart
+                                img(src='/images/orange.png')
+                              else
+                                img(src='/images/green.png')
                             td
                               span(onclick='save(\'VoID.ttl\', \'#{VoID}\');') Download
                         tr
@@ -198,7 +201,10 @@ block content
                               Missing
                           else
                             td
-                              img(src='/images/green.png')
+                              if SDPart
+                                img(src='/images/orange.png')
+                              else
+                                img(src='/images/green.png')
                             td
                               span(onclick='save(\'SD.ttl\', \'#{SD}\');') Download
       script.

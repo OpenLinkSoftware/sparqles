@@ -7,7 +7,7 @@ package sparqles.avro.calculation;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class CResult extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CResult\",\"namespace\":\"sparqles.avro.calculation\",\"fields\":[{\"name\":\"endpointResult\",\"type\":{\"type\":\"record\",\"name\":\"EndpointResult\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"start\",\"type\":\"long\"},{\"name\":\"end\",\"type\":\"long\"}],\"import\":\"Endpoint.avsc\"}},{\"name\":\"triples\",\"type\":\"int\"},{\"name\":\"entities\",\"type\":\"int\"},{\"name\":\"classes\",\"type\":\"int\"},{\"name\":\"properties\",\"type\":\"int\"},{\"name\":\"distinctSubjects\",\"type\":\"int\"},{\"name\":\"distinctObjects\",\"type\":\"int\"},{\"name\":\"exampleResources\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"RS\",\"type\":\"double\"}],\"import\":\"EndpointResult.avsc\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CResult\",\"namespace\":\"sparqles.avro.calculation\",\"fields\":[{\"name\":\"endpointResult\",\"type\":{\"type\":\"record\",\"name\":\"EndpointResult\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"start\",\"type\":\"long\"},{\"name\":\"end\",\"type\":\"long\"}],\"import\":\"Endpoint.avsc\"}},{\"name\":\"triples\",\"type\":\"int\"},{\"name\":\"entities\",\"type\":\"int\"},{\"name\":\"classes\",\"type\":\"int\"},{\"name\":\"properties\",\"type\":\"int\"},{\"name\":\"distinctSubjects\",\"type\":\"int\"},{\"name\":\"distinctObjects\",\"type\":\"int\"},{\"name\":\"exampleResources\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"VoIDPart\",\"type\":\"boolean\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"SDPart\",\"type\":\"boolean\"},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"RS\",\"type\":\"double\"}],\"import\":\"EndpointResult.avsc\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public sparqles.avro.EndpointResult endpointResult;
   @Deprecated public int triples;
@@ -18,7 +18,9 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   @Deprecated public int distinctObjects;
   @Deprecated public java.util.List<java.lang.CharSequence> exampleResources;
   @Deprecated public java.lang.CharSequence VoID;
+  @Deprecated public boolean VoIDPart;
   @Deprecated public java.lang.CharSequence SD;
+  @Deprecated public boolean SDPart;
   @Deprecated public double coherence;
   @Deprecated public double RS;
 
@@ -32,7 +34,7 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   /**
    * All-args constructor.
    */
-  public CResult(sparqles.avro.EndpointResult endpointResult, java.lang.Integer triples, java.lang.Integer entities, java.lang.Integer classes, java.lang.Integer properties, java.lang.Integer distinctSubjects, java.lang.Integer distinctObjects, java.util.List<java.lang.CharSequence> exampleResources, java.lang.CharSequence VoID, java.lang.CharSequence SD, java.lang.Double coherence, java.lang.Double RS) {
+  public CResult(sparqles.avro.EndpointResult endpointResult, java.lang.Integer triples, java.lang.Integer entities, java.lang.Integer classes, java.lang.Integer properties, java.lang.Integer distinctSubjects, java.lang.Integer distinctObjects, java.util.List<java.lang.CharSequence> exampleResources, java.lang.CharSequence VoID, java.lang.Boolean VoIDPart, java.lang.CharSequence SD, java.lang.Boolean SDPart, java.lang.Double coherence, java.lang.Double RS) {
     this.endpointResult = endpointResult;
     this.triples = triples;
     this.entities = entities;
@@ -42,7 +44,9 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     this.distinctObjects = distinctObjects;
     this.exampleResources = exampleResources;
     this.VoID = VoID;
+    this.VoIDPart = VoIDPart;
     this.SD = SD;
+    this.SDPart = SDPart;
     this.coherence = coherence;
     this.RS = RS;
   }
@@ -60,9 +64,11 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     case 6: return distinctObjects;
     case 7: return exampleResources;
     case 8: return VoID;
-    case 9: return SD;
-    case 10: return coherence;
-    case 11: return RS;
+    case 9: return VoIDPart;
+    case 10: return SD;
+    case 11: return SDPart;
+    case 12: return coherence;
+    case 13: return RS;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -79,9 +85,11 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     case 6: distinctObjects = (java.lang.Integer)value$; break;
     case 7: exampleResources = (java.util.List<java.lang.CharSequence>)value$; break;
     case 8: VoID = (java.lang.CharSequence)value$; break;
-    case 9: SD = (java.lang.CharSequence)value$; break;
-    case 10: coherence = (java.lang.Double)value$; break;
-    case 11: RS = (java.lang.Double)value$; break;
+    case 9: VoIDPart = (java.lang.Boolean)value$; break;
+    case 10: SD = (java.lang.CharSequence)value$; break;
+    case 11: SDPart = (java.lang.Boolean)value$; break;
+    case 12: coherence = (java.lang.Double)value$; break;
+    case 13: RS = (java.lang.Double)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -222,6 +230,21 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   /**
+   * Gets the value of the 'VoIDPart' field.
+   */
+  public java.lang.Boolean getVoIDPart() {
+    return VoIDPart;
+  }
+
+  /**
+   * Sets the value of the 'VoIDPart' field.
+   * @param value the value to set.
+   */
+  public void setVoIDPart(java.lang.Boolean value) {
+    this.VoIDPart = value;
+  }
+
+  /**
    * Gets the value of the 'SD' field.
    */
   public java.lang.CharSequence getSD() {
@@ -234,6 +257,21 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    */
   public void setSD(java.lang.CharSequence value) {
     this.SD = value;
+  }
+
+  /**
+   * Gets the value of the 'SDPart' field.
+   */
+  public java.lang.Boolean getSDPart() {
+    return SDPart;
+  }
+
+  /**
+   * Sets the value of the 'SDPart' field.
+   * @param value the value to set.
+   */
+  public void setSDPart(java.lang.Boolean value) {
+    this.SDPart = value;
   }
 
   /**
@@ -296,7 +334,9 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     private int distinctObjects;
     private java.util.List<java.lang.CharSequence> exampleResources;
     private java.lang.CharSequence VoID;
+    private boolean VoIDPart;
     private java.lang.CharSequence SD;
+    private boolean SDPart;
     private double coherence;
     private double RS;
 
@@ -344,17 +384,25 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
         this.VoID = data().deepCopy(fields()[8].schema(), other.VoID);
         fieldSetFlags()[8] = true;
       }
-      if (isValidValue(fields()[9], other.SD)) {
-        this.SD = data().deepCopy(fields()[9].schema(), other.SD);
+      if (isValidValue(fields()[9], other.VoIDPart)) {
+        this.VoIDPart = data().deepCopy(fields()[9].schema(), other.VoIDPart);
         fieldSetFlags()[9] = true;
       }
-      if (isValidValue(fields()[10], other.coherence)) {
-        this.coherence = data().deepCopy(fields()[10].schema(), other.coherence);
+      if (isValidValue(fields()[10], other.SD)) {
+        this.SD = data().deepCopy(fields()[10].schema(), other.SD);
         fieldSetFlags()[10] = true;
       }
-      if (isValidValue(fields()[11], other.RS)) {
-        this.RS = data().deepCopy(fields()[11].schema(), other.RS);
+      if (isValidValue(fields()[11], other.SDPart)) {
+        this.SDPart = data().deepCopy(fields()[11].schema(), other.SDPart);
         fieldSetFlags()[11] = true;
+      }
+      if (isValidValue(fields()[12], other.coherence)) {
+        this.coherence = data().deepCopy(fields()[12].schema(), other.coherence);
+        fieldSetFlags()[12] = true;
+      }
+      if (isValidValue(fields()[13], other.RS)) {
+        this.RS = data().deepCopy(fields()[13].schema(), other.RS);
+        fieldSetFlags()[13] = true;
       }
     }
     
@@ -397,17 +445,25 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
         this.VoID = data().deepCopy(fields()[8].schema(), other.VoID);
         fieldSetFlags()[8] = true;
       }
-      if (isValidValue(fields()[9], other.SD)) {
-        this.SD = data().deepCopy(fields()[9].schema(), other.SD);
+      if (isValidValue(fields()[9], other.VoIDPart)) {
+        this.VoIDPart = data().deepCopy(fields()[9].schema(), other.VoIDPart);
         fieldSetFlags()[9] = true;
       }
-      if (isValidValue(fields()[10], other.coherence)) {
-        this.coherence = data().deepCopy(fields()[10].schema(), other.coherence);
+      if (isValidValue(fields()[10], other.SD)) {
+        this.SD = data().deepCopy(fields()[10].schema(), other.SD);
         fieldSetFlags()[10] = true;
       }
-      if (isValidValue(fields()[11], other.RS)) {
-        this.RS = data().deepCopy(fields()[11].schema(), other.RS);
+      if (isValidValue(fields()[11], other.SDPart)) {
+        this.SDPart = data().deepCopy(fields()[11].schema(), other.SDPart);
         fieldSetFlags()[11] = true;
+      }
+      if (isValidValue(fields()[12], other.coherence)) {
+        this.coherence = data().deepCopy(fields()[12].schema(), other.coherence);
+        fieldSetFlags()[12] = true;
+      }
+      if (isValidValue(fields()[13], other.RS)) {
+        this.RS = data().deepCopy(fields()[13].schema(), other.RS);
+        fieldSetFlags()[13] = true;
       }
     }
 
@@ -630,6 +686,30 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
       return this;
     }
 
+    /** Gets the value of the 'VoIDPart' field */
+    public java.lang.Boolean getVoIDPart() {
+      return VoIDPart;
+    }
+    
+    /** Sets the value of the 'VoIDPart' field */
+    public sparqles.avro.calculation.CResult.Builder setVoIDPart(boolean value) {
+      validate(fields()[9], value);
+      this.VoIDPart = value;
+      fieldSetFlags()[9] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'VoIDPart' field has been set */
+    public boolean hasVoIDPart() {
+      return fieldSetFlags()[9];
+    }
+    
+    /** Clears the value of the 'VoIDPart' field */
+    public sparqles.avro.calculation.CResult.Builder clearVoIDPart() {
+      fieldSetFlags()[9] = false;
+      return this;
+    }
+
     /** Gets the value of the 'SD' field */
     public java.lang.CharSequence getSD() {
       return SD;
@@ -637,21 +717,45 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     
     /** Sets the value of the 'SD' field */
     public sparqles.avro.calculation.CResult.Builder setSD(java.lang.CharSequence value) {
-      validate(fields()[9], value);
+      validate(fields()[10], value);
       this.SD = value;
-      fieldSetFlags()[9] = true;
+      fieldSetFlags()[10] = true;
       return this; 
     }
     
     /** Checks whether the 'SD' field has been set */
     public boolean hasSD() {
-      return fieldSetFlags()[9];
+      return fieldSetFlags()[10];
     }
     
     /** Clears the value of the 'SD' field */
     public sparqles.avro.calculation.CResult.Builder clearSD() {
       SD = null;
-      fieldSetFlags()[9] = false;
+      fieldSetFlags()[10] = false;
+      return this;
+    }
+
+    /** Gets the value of the 'SDPart' field */
+    public java.lang.Boolean getSDPart() {
+      return SDPart;
+    }
+    
+    /** Sets the value of the 'SDPart' field */
+    public sparqles.avro.calculation.CResult.Builder setSDPart(boolean value) {
+      validate(fields()[11], value);
+      this.SDPart = value;
+      fieldSetFlags()[11] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'SDPart' field has been set */
+    public boolean hasSDPart() {
+      return fieldSetFlags()[11];
+    }
+    
+    /** Clears the value of the 'SDPart' field */
+    public sparqles.avro.calculation.CResult.Builder clearSDPart() {
+      fieldSetFlags()[11] = false;
       return this;
     }
 
@@ -662,20 +766,20 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     
     /** Sets the value of the 'coherence' field */
     public sparqles.avro.calculation.CResult.Builder setCoherence(double value) {
-      validate(fields()[10], value);
+      validate(fields()[12], value);
       this.coherence = value;
-      fieldSetFlags()[10] = true;
+      fieldSetFlags()[12] = true;
       return this; 
     }
     
     /** Checks whether the 'coherence' field has been set */
     public boolean hasCoherence() {
-      return fieldSetFlags()[10];
+      return fieldSetFlags()[12];
     }
     
     /** Clears the value of the 'coherence' field */
     public sparqles.avro.calculation.CResult.Builder clearCoherence() {
-      fieldSetFlags()[10] = false;
+      fieldSetFlags()[12] = false;
       return this;
     }
 
@@ -686,20 +790,20 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     
     /** Sets the value of the 'RS' field */
     public sparqles.avro.calculation.CResult.Builder setRS(double value) {
-      validate(fields()[11], value);
+      validate(fields()[13], value);
       this.RS = value;
-      fieldSetFlags()[11] = true;
+      fieldSetFlags()[13] = true;
       return this; 
     }
     
     /** Checks whether the 'RS' field has been set */
     public boolean hasRS() {
-      return fieldSetFlags()[11];
+      return fieldSetFlags()[13];
     }
     
     /** Clears the value of the 'RS' field */
     public sparqles.avro.calculation.CResult.Builder clearRS() {
-      fieldSetFlags()[11] = false;
+      fieldSetFlags()[13] = false;
       return this;
     }
 
@@ -716,9 +820,11 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
         record.distinctObjects = fieldSetFlags()[6] ? this.distinctObjects : (java.lang.Integer) defaultValue(fields()[6]);
         record.exampleResources = fieldSetFlags()[7] ? this.exampleResources : (java.util.List<java.lang.CharSequence>) defaultValue(fields()[7]);
         record.VoID = fieldSetFlags()[8] ? this.VoID : (java.lang.CharSequence) defaultValue(fields()[8]);
-        record.SD = fieldSetFlags()[9] ? this.SD : (java.lang.CharSequence) defaultValue(fields()[9]);
-        record.coherence = fieldSetFlags()[10] ? this.coherence : (java.lang.Double) defaultValue(fields()[10]);
-        record.RS = fieldSetFlags()[11] ? this.RS : (java.lang.Double) defaultValue(fields()[11]);
+        record.VoIDPart = fieldSetFlags()[9] ? this.VoIDPart : (java.lang.Boolean) defaultValue(fields()[9]);
+        record.SD = fieldSetFlags()[10] ? this.SD : (java.lang.CharSequence) defaultValue(fields()[10]);
+        record.SDPart = fieldSetFlags()[11] ? this.SDPart : (java.lang.Boolean) defaultValue(fields()[11]);
+        record.coherence = fieldSetFlags()[12] ? this.coherence : (java.lang.Double) defaultValue(fields()[12]);
+        record.RS = fieldSetFlags()[13] ? this.RS : (java.lang.Double) defaultValue(fields()[13]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

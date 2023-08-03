@@ -151,26 +151,26 @@ block content
               div 
                table#table_current.psp-table(cellspacing='0', cellpadding='0', border='0', width='100%')
                 tr
-                  td(valign='top', style='width:50%;; padding: 0em 2em;')
-                    table#table_current(cellspacing='0', cellpadding='0', border='0', style='margin-left:1em;', width='40%')
+                  td(valign='top', style='width:75%;; padding: 0em 2em;')
+                    table#table_current(cellspacing='0', cellpadding='0', border='0', style='margin-left:1em;', width='100%')
                       thead
                         tr
                           th.tablehead 
                             span(onmouseover='tooltip.show(\'#{configProfiles["Statistics"]}\')', onmouseout='tooltip.hide();') Statistics
-                          th.tablehead 
-                      tbody
+                          th.tablehead
+                       tbody
                         - each y, x in epProfile
-                          if i != 'exampleResources'
+                          if x != 'exampleResources'
                             tr
-                              td.tdleft #{x}
-                              td.tdright #{y}
+                              td #{x}
+                              td #{y}
                           else
                             - each z in y
                               tr
-                                td.tdleft Example resource
-                                td.tdright #{z}
-                  td(valign='top', style='width:50%;; padding: 0em 2em;')
-                    table#table_current(cellspacing='0', cellpadding='0', border='0', style='margin-left:1em;', width='40%')
+                                td Example resource
+                                td #{z}
+                  td(valign='top', style='width:25%;; padding: 0em 2em;')
+                    table#table_current(cellspacing='0', cellpadding='0', border='0', style='margin-left:1em;', width='80%')
                       thead
                         tr
                           th.tablehead Graphs
@@ -191,7 +191,7 @@ block content
                               else
                                 img(src='/images/green.png')
                             td
-                              span(onclick='save(\'VoID.ttl\', \'#{VoID}\');') Download
+                              span(onclick='save(\'VoID.ttl\', \'#{VoID.replace(/\n/g, "\\n")}\');') Download
                         tr
                           td.tdleft SD Description
                           if SD == ''
@@ -206,7 +206,7 @@ block content
                               else
                                 img(src='/images/green.png')
                             td
-                              span(onclick='save(\'SD.ttl\', \'#{SD}\');') Download
+                              span(onclick='save(\'SD.ttl\', \'#{SD.replace(/\n/g, "\\n")}\');') Download
       script.
         var colors = d3.scale.category20();
         keyColor = function(d, i) {return colors(d.key)};

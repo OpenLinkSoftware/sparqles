@@ -80,7 +80,7 @@ public class CTask extends EndpointTask<CResult> {
 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 	"SELECT ?value\n"+
 	"WHERE { ?value rdf:type ?class }\n" +
-	"LIMIT 1";
+	"LIMIT 3";
     
     public CTask(Endpoint ep) {
 	super(ep);
@@ -101,8 +101,7 @@ public class CTask extends EndpointTask<CResult> {
 	int properties = -1;
 	int distinctSubjects = -1;
 	int distinctObjects = -1;
-	String exampleResource = "";
-	java.util.List<java.lang.CharSequence> exampleResourceList = new java.util.ArrayList<>();
+	java.util.List<java.lang.CharSequence> exampleResourceList =  new java.util.ArrayList<>();
 	String VoID = "";
 	boolean VoIDPart = false;
 	String SD = "";
@@ -128,41 +127,28 @@ public class CTask extends EndpointTask<CResult> {
 	if (ping) {
 	    log.info("[GENERATION of VoiD] {}", _epURI);
 	    //if (false) {
-	    RDFNode n = executeQuery(_epURI, queryNumberOfTriples);
-	    if (n != null)
-		triples = ((Literal)n).getInt();
-	    else
+	    triples = executeIntQuery(_epURI, queryNumberOfTriples);
+	    if (triples == -1)
 		VoIDPart = true;
-	    n = executeQuery(_epURI, queryNumberOfEntities);
-	    if (n != null)
-		entities = ((Literal)n).getInt();
-	    else
+	    entities = executeIntQuery(_epURI, queryNumberOfEntities);
+	    if (entities == -1)
 		VoIDPart = true;
-	    n = executeQuery(_epURI, queryNumberOfClasses);
-	    if (n != null)
-		classes = ((Literal)n).getInt();
-	    else
+	    classes = executeIntQuery(_epURI, queryNumberOfClasses);
+	    if (classes == -1)
 		VoIDPart = true;
-	    n = executeQuery(_epURI, queryNumberOfProperties);
-	    if (n != null)
-		properties = ((Literal)n).getInt();
-	    else
+	    properties = executeIntQuery(_epURI, queryNumberOfProperties);
+	    if (properties == -1)
 		VoIDPart = true;
-	    n = executeQuery(_epURI, queryNumberOfSubjects);
-	    if (n != null)
-		distinctSubjects = ((Literal)n).getInt();
-	    else
+	    distinctSubjects = executeIntQuery(_epURI, queryNumberOfSubjects);
+	    if (distinctSubjects == -1)
 		VoIDPart = true;
-	    n = executeQuery(_epURI, queryNumberOfObjects);
-	    if (n != null)
-		distinctObjects = ((Literal)n).getInt();
-	    else
+	    distinctObjects = executeIntQuery(_epURI, queryNumberOfObjects);
+	    if (distinctObjects == -1)
 		VoIDPart = true;
-	    n = executeQuery(_epURI, queryExampleResource);
-	    if (n != null)
-		exampleResource = ((Resource)n).toString();
-	    else
+	    exampleResourceList = executeQuery(_epURI, queryExampleResource);
+	    if (exampleResourceList.size() == 0)
 		VoIDPart = true;
+	    
 	    try {
 		log.info("Coherence calculation for {} ...", _epURI);
 		coherence = calculateCoherence(_epURI);
@@ -231,12 +217,8 @@ public class CTask extends EndpointTask<CResult> {
 	    
 	    endpointEntity.addProperty(RDF.type, voidDataset);
 	    endpointEntity.addProperty(voidsparqlEndpoint, endpointEntity);
-	    if (exampleResource != "") endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResource));
-	    // VoID supports multiple example resources in the profile.
-	    // We currently add only one, for simplicity.
-	    // TODO: Add more example resources.
-	    // endpointEntity.addProperty(voidexampleResource, //example resource 2);
-	    // endpointEntity.addProperty(voidexampleResource, //example resource 3);
+	    for (int i = 0; i < exampleResourceList.size(); i++)
+		endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResourceList.get(i).toString()));
 	    endpointEntity.addProperty(voidtriples, Integer.toString(triples));
 	    endpointEntity.addProperty(voidentities, Integer.toString(entities));
 	    endpointEntity.addProperty(voidclasses, Integer.toString(classes));
@@ -260,7 +242,6 @@ public class CTask extends EndpointTask<CResult> {
 	result.setProperties(properties);
 	result.setDistinctSubjects(distinctSubjects);
 	result.setDistinctObjects(distinctObjects);
-	exampleResourceList.add(exampleResource);
 	result.setExampleResources(exampleResourceList);
 	result.setVoID(VoID);
 	result.setVoIDPart(VoIDPart);
@@ -274,15 +255,15 @@ public class CTask extends EndpointTask<CResult> {
 	return result;
     }
     
-    public RDFNode executeQuery(String endpointURL, String queryText) {
+    public int executeIntQuery(String endpointURL, String queryText) {
 	Query query = QueryFactory.create(queryText);
 	QueryExecution qexec = QueryExecutionFactory.sparqlService(endpointURL, query);
-	RDFNode node = null;
+	int result = -1;
 	try {
 	    ResultSet results = qexec.execSelect();
 	    if(results.hasNext()){
 		QuerySolution thisRow = results.next();
-		node = ((RDFNode) thisRow.get("value"));
+		result = ((Literal) thisRow.get("value")).getInt();
 	    }
 	}
 	catch (Exception e) {
@@ -291,7 +272,29 @@ public class CTask extends EndpointTask<CResult> {
 	    log.info("[Error details: {}]", e.toString());
 	}
 	qexec.close() ;
-	return node;
+	return result;
+    }
+
+    public java.util.List<java.lang.CharSequence> executeQuery(String endpointURL, String queryText) {
+	Query query = QueryFactory.create(queryText);
+	QueryExecution qexec = QueryExecutionFactory.sparqlService(endpointURL, query);
+	java.util.List<java.lang.CharSequence> list = new java.util.ArrayList<>();
+	try {
+	    ResultSet results = qexec.execSelect();
+	    if (results != null) {
+		while (results.hasNext()) {
+		    QuerySolution thisRow = results.next();
+		    list.add(((Resource)thisRow.get("value")).toString());
+		}
+	    }
+	}
+	catch (Exception e) {
+	    log.info("[Error executing SPARQL query for {}]", endpointURL);
+	    log.info("[SPARQL query: {}]", queryText);
+	    log.info("[Error details: {}]", e.toString());
+	}
+	qexec.close() ;
+	return list;
     }
     
     public double calculateCoherence(String endpointUrl) {

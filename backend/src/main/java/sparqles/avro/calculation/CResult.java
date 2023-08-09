@@ -7,15 +7,15 @@ package sparqles.avro.calculation;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class CResult extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CResult\",\"namespace\":\"sparqles.avro.calculation\",\"fields\":[{\"name\":\"endpointResult\",\"type\":{\"type\":\"record\",\"name\":\"EndpointResult\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"start\",\"type\":\"long\"},{\"name\":\"end\",\"type\":\"long\"}],\"import\":\"Endpoint.avsc\"}},{\"name\":\"triples\",\"type\":\"int\"},{\"name\":\"entities\",\"type\":\"int\"},{\"name\":\"classes\",\"type\":\"int\"},{\"name\":\"properties\",\"type\":\"int\"},{\"name\":\"distinctSubjects\",\"type\":\"int\"},{\"name\":\"distinctObjects\",\"type\":\"int\"},{\"name\":\"exampleResources\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"VoIDPart\",\"type\":\"boolean\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"SDPart\",\"type\":\"boolean\"},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"RS\",\"type\":\"double\"}],\"import\":\"EndpointResult.avsc\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CResult\",\"namespace\":\"sparqles.avro.calculation\",\"fields\":[{\"name\":\"endpointResult\",\"type\":{\"type\":\"record\",\"name\":\"EndpointResult\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"start\",\"type\":\"long\"},{\"name\":\"end\",\"type\":\"long\"}],\"import\":\"Endpoint.avsc\"}},{\"name\":\"triples\",\"type\":\"long\"},{\"name\":\"entities\",\"type\":\"long\"},{\"name\":\"classes\",\"type\":\"long\"},{\"name\":\"properties\",\"type\":\"long\"},{\"name\":\"distinctSubjects\",\"type\":\"long\"},{\"name\":\"distinctObjects\",\"type\":\"long\"},{\"name\":\"exampleResources\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"VoID\",\"type\":\"string\"},{\"name\":\"VoIDPart\",\"type\":\"boolean\"},{\"name\":\"SD\",\"type\":\"string\"},{\"name\":\"SDPart\",\"type\":\"boolean\"},{\"name\":\"coherence\",\"type\":\"double\"},{\"name\":\"RS\",\"type\":\"double\"}],\"import\":\"EndpointResult.avsc\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public sparqles.avro.EndpointResult endpointResult;
-  @Deprecated public int triples;
-  @Deprecated public int entities;
-  @Deprecated public int classes;
-  @Deprecated public int properties;
-  @Deprecated public int distinctSubjects;
-  @Deprecated public int distinctObjects;
+  @Deprecated public long triples;
+  @Deprecated public long entities;
+  @Deprecated public long classes;
+  @Deprecated public long properties;
+  @Deprecated public long distinctSubjects;
+  @Deprecated public long distinctObjects;
   @Deprecated public java.util.List<java.lang.CharSequence> exampleResources;
   @Deprecated public java.lang.CharSequence VoID;
   @Deprecated public boolean VoIDPart;
@@ -34,7 +34,7 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   /**
    * All-args constructor.
    */
-  public CResult(sparqles.avro.EndpointResult endpointResult, java.lang.Integer triples, java.lang.Integer entities, java.lang.Integer classes, java.lang.Integer properties, java.lang.Integer distinctSubjects, java.lang.Integer distinctObjects, java.util.List<java.lang.CharSequence> exampleResources, java.lang.CharSequence VoID, java.lang.Boolean VoIDPart, java.lang.CharSequence SD, java.lang.Boolean SDPart, java.lang.Double coherence, java.lang.Double RS) {
+  public CResult(sparqles.avro.EndpointResult endpointResult, java.lang.Long triples, java.lang.Long entities, java.lang.Long classes, java.lang.Long properties, java.lang.Long distinctSubjects, java.lang.Long distinctObjects, java.util.List<java.lang.CharSequence> exampleResources, java.lang.CharSequence VoID, java.lang.Boolean VoIDPart, java.lang.CharSequence SD, java.lang.Boolean SDPart, java.lang.Double coherence, java.lang.Double RS) {
     this.endpointResult = endpointResult;
     this.triples = triples;
     this.entities = entities;
@@ -77,12 +77,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: endpointResult = (sparqles.avro.EndpointResult)value$; break;
-    case 1: triples = (java.lang.Integer)value$; break;
-    case 2: entities = (java.lang.Integer)value$; break;
-    case 3: classes = (java.lang.Integer)value$; break;
-    case 4: properties = (java.lang.Integer)value$; break;
-    case 5: distinctSubjects = (java.lang.Integer)value$; break;
-    case 6: distinctObjects = (java.lang.Integer)value$; break;
+    case 1: triples = (java.lang.Long)value$; break;
+    case 2: entities = (java.lang.Long)value$; break;
+    case 3: classes = (java.lang.Long)value$; break;
+    case 4: properties = (java.lang.Long)value$; break;
+    case 5: distinctSubjects = (java.lang.Long)value$; break;
+    case 6: distinctObjects = (java.lang.Long)value$; break;
     case 7: exampleResources = (java.util.List<java.lang.CharSequence>)value$; break;
     case 8: VoID = (java.lang.CharSequence)value$; break;
     case 9: VoIDPart = (java.lang.Boolean)value$; break;
@@ -112,7 +112,7 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
   /**
    * Gets the value of the 'triples' field.
    */
-  public java.lang.Integer getTriples() {
+  public java.lang.Long getTriples() {
     return triples;
   }
 
@@ -120,14 +120,14 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'triples' field.
    * @param value the value to set.
    */
-  public void setTriples(java.lang.Integer value) {
+  public void setTriples(java.lang.Long value) {
     this.triples = value;
   }
 
   /**
    * Gets the value of the 'entities' field.
    */
-  public java.lang.Integer getEntities() {
+  public java.lang.Long getEntities() {
     return entities;
   }
 
@@ -135,14 +135,14 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'entities' field.
    * @param value the value to set.
    */
-  public void setEntities(java.lang.Integer value) {
+  public void setEntities(java.lang.Long value) {
     this.entities = value;
   }
 
   /**
    * Gets the value of the 'classes' field.
    */
-  public java.lang.Integer getClasses() {
+  public java.lang.Long getClasses() {
     return classes;
   }
 
@@ -150,14 +150,14 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'classes' field.
    * @param value the value to set.
    */
-  public void setClasses(java.lang.Integer value) {
+  public void setClasses(java.lang.Long value) {
     this.classes = value;
   }
 
   /**
    * Gets the value of the 'properties' field.
    */
-  public java.lang.Integer getProperties() {
+  public java.lang.Long getProperties() {
     return properties;
   }
 
@@ -165,14 +165,14 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'properties' field.
    * @param value the value to set.
    */
-  public void setProperties(java.lang.Integer value) {
+  public void setProperties(java.lang.Long value) {
     this.properties = value;
   }
 
   /**
    * Gets the value of the 'distinctSubjects' field.
    */
-  public java.lang.Integer getDistinctSubjects() {
+  public java.lang.Long getDistinctSubjects() {
     return distinctSubjects;
   }
 
@@ -180,14 +180,14 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'distinctSubjects' field.
    * @param value the value to set.
    */
-  public void setDistinctSubjects(java.lang.Integer value) {
+  public void setDistinctSubjects(java.lang.Long value) {
     this.distinctSubjects = value;
   }
 
   /**
    * Gets the value of the 'distinctObjects' field.
    */
-  public java.lang.Integer getDistinctObjects() {
+  public java.lang.Long getDistinctObjects() {
     return distinctObjects;
   }
 
@@ -195,7 +195,7 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'distinctObjects' field.
    * @param value the value to set.
    */
-  public void setDistinctObjects(java.lang.Integer value) {
+  public void setDistinctObjects(java.lang.Long value) {
     this.distinctObjects = value;
   }
 
@@ -326,12 +326,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     implements org.apache.avro.data.RecordBuilder<CResult> {
 
     private sparqles.avro.EndpointResult endpointResult;
-    private int triples;
-    private int entities;
-    private int classes;
-    private int properties;
-    private int distinctSubjects;
-    private int distinctObjects;
+    private long triples;
+    private long entities;
+    private long classes;
+    private long properties;
+    private long distinctSubjects;
+    private long distinctObjects;
     private java.util.List<java.lang.CharSequence> exampleResources;
     private java.lang.CharSequence VoID;
     private boolean VoIDPart;
@@ -493,12 +493,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     }
 
     /** Gets the value of the 'triples' field */
-    public java.lang.Integer getTriples() {
+    public java.lang.Long getTriples() {
       return triples;
     }
     
     /** Sets the value of the 'triples' field */
-    public sparqles.avro.calculation.CResult.Builder setTriples(int value) {
+    public sparqles.avro.calculation.CResult.Builder setTriples(long value) {
       validate(fields()[1], value);
       this.triples = value;
       fieldSetFlags()[1] = true;
@@ -517,12 +517,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     }
 
     /** Gets the value of the 'entities' field */
-    public java.lang.Integer getEntities() {
+    public java.lang.Long getEntities() {
       return entities;
     }
     
     /** Sets the value of the 'entities' field */
-    public sparqles.avro.calculation.CResult.Builder setEntities(int value) {
+    public sparqles.avro.calculation.CResult.Builder setEntities(long value) {
       validate(fields()[2], value);
       this.entities = value;
       fieldSetFlags()[2] = true;
@@ -541,12 +541,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     }
 
     /** Gets the value of the 'classes' field */
-    public java.lang.Integer getClasses() {
+    public java.lang.Long getClasses() {
       return classes;
     }
     
     /** Sets the value of the 'classes' field */
-    public sparqles.avro.calculation.CResult.Builder setClasses(int value) {
+    public sparqles.avro.calculation.CResult.Builder setClasses(long value) {
       validate(fields()[3], value);
       this.classes = value;
       fieldSetFlags()[3] = true;
@@ -565,12 +565,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     }
 
     /** Gets the value of the 'properties' field */
-    public java.lang.Integer getProperties() {
+    public java.lang.Long getProperties() {
       return properties;
     }
     
     /** Sets the value of the 'properties' field */
-    public sparqles.avro.calculation.CResult.Builder setProperties(int value) {
+    public sparqles.avro.calculation.CResult.Builder setProperties(long value) {
       validate(fields()[4], value);
       this.properties = value;
       fieldSetFlags()[4] = true;
@@ -589,12 +589,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     }
 
     /** Gets the value of the 'distinctSubjects' field */
-    public java.lang.Integer getDistinctSubjects() {
+    public java.lang.Long getDistinctSubjects() {
       return distinctSubjects;
     }
     
     /** Sets the value of the 'distinctSubjects' field */
-    public sparqles.avro.calculation.CResult.Builder setDistinctSubjects(int value) {
+    public sparqles.avro.calculation.CResult.Builder setDistinctSubjects(long value) {
       validate(fields()[5], value);
       this.distinctSubjects = value;
       fieldSetFlags()[5] = true;
@@ -613,12 +613,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
     }
 
     /** Gets the value of the 'distinctObjects' field */
-    public java.lang.Integer getDistinctObjects() {
+    public java.lang.Long getDistinctObjects() {
       return distinctObjects;
     }
     
     /** Sets the value of the 'distinctObjects' field */
-    public sparqles.avro.calculation.CResult.Builder setDistinctObjects(int value) {
+    public sparqles.avro.calculation.CResult.Builder setDistinctObjects(long value) {
       validate(fields()[6], value);
       this.distinctObjects = value;
       fieldSetFlags()[6] = true;
@@ -812,12 +812,12 @@ public class CResult extends org.apache.avro.specific.SpecificRecordBase impleme
       try {
         CResult record = new CResult();
         record.endpointResult = fieldSetFlags()[0] ? this.endpointResult : (sparqles.avro.EndpointResult) defaultValue(fields()[0]);
-        record.triples = fieldSetFlags()[1] ? this.triples : (java.lang.Integer) defaultValue(fields()[1]);
-        record.entities = fieldSetFlags()[2] ? this.entities : (java.lang.Integer) defaultValue(fields()[2]);
-        record.classes = fieldSetFlags()[3] ? this.classes : (java.lang.Integer) defaultValue(fields()[3]);
-        record.properties = fieldSetFlags()[4] ? this.properties : (java.lang.Integer) defaultValue(fields()[4]);
-        record.distinctSubjects = fieldSetFlags()[5] ? this.distinctSubjects : (java.lang.Integer) defaultValue(fields()[5]);
-        record.distinctObjects = fieldSetFlags()[6] ? this.distinctObjects : (java.lang.Integer) defaultValue(fields()[6]);
+        record.triples = fieldSetFlags()[1] ? this.triples : (java.lang.Long) defaultValue(fields()[1]);
+        record.entities = fieldSetFlags()[2] ? this.entities : (java.lang.Long) defaultValue(fields()[2]);
+        record.classes = fieldSetFlags()[3] ? this.classes : (java.lang.Long) defaultValue(fields()[3]);
+        record.properties = fieldSetFlags()[4] ? this.properties : (java.lang.Long) defaultValue(fields()[4]);
+        record.distinctSubjects = fieldSetFlags()[5] ? this.distinctSubjects : (java.lang.Long) defaultValue(fields()[5]);
+        record.distinctObjects = fieldSetFlags()[6] ? this.distinctObjects : (java.lang.Long) defaultValue(fields()[6]);
         record.exampleResources = fieldSetFlags()[7] ? this.exampleResources : (java.util.List<java.lang.CharSequence>) defaultValue(fields()[7]);
         record.VoID = fieldSetFlags()[8] ? this.VoID : (java.lang.CharSequence) defaultValue(fields()[8]);
         record.VoIDPart = fieldSetFlags()[9] ? this.VoIDPart : (java.lang.Boolean) defaultValue(fields()[9]);

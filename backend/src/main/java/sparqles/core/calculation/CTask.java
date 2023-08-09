@@ -33,6 +33,7 @@ import sparqles.utils.MongoDBManager;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.*;
 import com.hp.hpl.jena.query.*;
+import java.util.concurrent.TimeUnit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.math3.stat.descriptive.moment.Kurtosis;
@@ -90,17 +91,19 @@ public class CTask extends EndpointTask<CResult> {
     public CResult process(EndpointResult epr) {
 	CResult result = new CResult();
 	result.setEndpointResult(epr);
+	//if (!_epURI.equals("http://sparql.uniprot.org"))
+	//    return result;
 	log.info("### execute {}", _epURI);
 
 	// Code for generating a VoID and SPARQL Service Description profile for the endpoint.
 	// author: Milos Jovanovik (@mjovanovik)
 	
-	int triples = -1;
-	int entities = -1;
-	int classes = -1;
-	int properties = -1;
-	int distinctSubjects = -1;
-	int distinctObjects = -1;
+	long triples = -1;
+	long entities = -1;
+	long classes = -1;
+	long properties = -1;
+	long distinctSubjects = -1;
+	long distinctObjects = -1;
 	java.util.List<java.lang.CharSequence> exampleResourceList =  new java.util.ArrayList<>();
 	String VoID = "";
 	boolean VoIDPart = false;
@@ -127,31 +130,41 @@ public class CTask extends EndpointTask<CResult> {
 	if (ping) {
 	    log.info("[GENERATION of VoiD] {}", _epURI);
 	    //if (false) {
-	    triples = executeIntQuery(_epURI, queryNumberOfTriples);
+	    //log.info("%%%%% {} 0", _epURI);
+	    triples = executeLongQuery(_epURI, queryNumberOfTriples);
 	    if (triples == -1)
 		VoIDPart = true;
-	    entities = executeIntQuery(_epURI, queryNumberOfEntities);
+	    //log.info("%%%%% {} 1", _epURI);
+	    //if (!_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack	    
+	    entities = executeLongQuery(_epURI, queryNumberOfEntities);
 	    if (entities == -1)
 		VoIDPart = true;
-	    classes = executeIntQuery(_epURI, queryNumberOfClasses);
+	    //log.info("%%%%% {} 2", _epURI);
+	    classes = executeLongQuery(_epURI, queryNumberOfClasses);
 	    if (classes == -1)
 		VoIDPart = true;
-	    properties = executeIntQuery(_epURI, queryNumberOfProperties);
+	    //log.info("%%%%% {} 3", _epURI);
+	    properties = executeLongQuery(_epURI, queryNumberOfProperties);
 	    if (properties == -1)
 		VoIDPart = true;
-	    distinctSubjects = executeIntQuery(_epURI, queryNumberOfSubjects);
+	    //log.info("%%%%% {} 4", _epURI);
+	    //if (!_epURI.equals("http://fr.dbpedia.org/sparql") && !_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack
+	    distinctSubjects = executeLongQuery(_epURI, queryNumberOfSubjects);
 	    if (distinctSubjects == -1)
 		VoIDPart = true;
-	    distinctObjects = executeIntQuery(_epURI, queryNumberOfObjects);
+	    //log.info("%%%%% {} 5", _epURI);
+	    //if (!_epURI.equals("http://fr.dbpedia.org/sparql") && !_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack
+	    distinctObjects = executeLongQuery(_epURI, queryNumberOfObjects);
 	    if (distinctObjects == -1)
 		VoIDPart = true;
+	    //log.info("%%%%% {} 6", _epURI);
 	    exampleResourceList = executeQuery(_epURI, queryExampleResource);
 	    if (exampleResourceList.size() == 0)
 		VoIDPart = true;
 	    
 	    try {
 		log.info("Coherence calculation for {} ...", _epURI);
-		coherence = calculateCoherence(_epURI);
+		//coherence = calculateCoherence(_epURI);
 	    }
 	    catch (Exception e) {
 		log.warn("[Error details: {}]", e.toString());
@@ -206,7 +219,7 @@ public class CTask extends EndpointTask<CResult> {
 				       model.createResource().addProperty(RDF.type, sdDataset)
 				       .addProperty(sddefaultGraph,
 						    model.createResource().addProperty(RDF.type, sdGraph)
-						    .addProperty(voidtriples, Integer.toString(triples))));
+						    .addProperty(voidtriples, Long.toString(triples))));
 	    
 	    // construct the VoID Profile in RDF
 	    endpointEntityDescription.addProperty(RDF.type, voidDatasetDescription);
@@ -219,12 +232,12 @@ public class CTask extends EndpointTask<CResult> {
 	    endpointEntity.addProperty(voidsparqlEndpoint, endpointEntity);
 	    for (int i = 0; i < exampleResourceList.size(); i++)
 		endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResourceList.get(i).toString()));
-	    endpointEntity.addProperty(voidtriples, Integer.toString(triples));
-	    endpointEntity.addProperty(voidentities, Integer.toString(entities));
-	    endpointEntity.addProperty(voidclasses, Integer.toString(classes));
-	    endpointEntity.addProperty(voidproperties, Integer.toString(properties));
-	    endpointEntity.addProperty(voiddistinctSubjects, Integer.toString(distinctSubjects));
-	    endpointEntity.addProperty(voiddistinctObjects, Integer.toString(distinctObjects));
+	    endpointEntity.addProperty(voidtriples, Long.toString(triples));
+	    endpointEntity.addProperty(voidentities, Long.toString(entities));
+	    endpointEntity.addProperty(voidclasses, Long.toString(classes));
+	    endpointEntity.addProperty(voidproperties, Long.toString(properties));
+	    endpointEntity.addProperty(voiddistinctSubjects, Long.toString(distinctSubjects));
+	    endpointEntity.addProperty(voiddistinctObjects, Long.toString(distinctObjects));
 	    
 	    // add the Coherence value for the endpoint
 	    endpointEntity.addProperty(coherenceValue, Double.toString(coherence));
@@ -255,15 +268,16 @@ public class CTask extends EndpointTask<CResult> {
 	return result;
     }
     
-    public int executeIntQuery(String endpointURL, String queryText) {
+    public long executeLongQuery(String endpointURL, String queryText) {
 	Query query = QueryFactory.create(queryText);
 	QueryExecution qexec = QueryExecutionFactory.sparqlService(endpointURL, query);
-	int result = -1;
+	qexec.setTimeout(10, TimeUnit.MINUTES);
+	long result = -1;
 	try {
 	    ResultSet results = qexec.execSelect();
 	    if(results.hasNext()){
 		QuerySolution thisRow = results.next();
-		result = ((Literal) thisRow.get("value")).getInt();
+		result = ((Literal) thisRow.get("value")).getLong();
 	    }
 	}
 	catch (Exception e) {

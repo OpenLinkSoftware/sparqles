@@ -5,12 +5,12 @@
  	"name": "CResult",
  	"fields": [
     	{"name": "endpointResult", "type": "sparqles.avro.EndpointResult"},
-	{"name": "triples", "type": "int"},
-	{"name": "entities", "type": "int"},
-	{"name": "classes", "type": "int"},
-	{"name": "properties", "type": "int"},
-	{"name": "distinctSubjects", "type": "int"},
-	{"name": "distinctObjects", "type": "int"},
+	{"name": "triples", "type": "long"},
+	{"name": "entities", "type": "long"},
+	{"name": "classes", "type": "long"},
+	{"name": "properties", "type": "long"},
+	{"name": "distinctSubjects", "type": "long"},
+	{"name": "distinctObjects", "type": "long"},
 	{"name": "exampleResources", "type":
     	    {"type": "array", "items": 
     		{	

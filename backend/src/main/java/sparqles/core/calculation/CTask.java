@@ -91,7 +91,7 @@ public class CTask extends EndpointTask<CResult> {
     public CResult process(EndpointResult epr) {
 	CResult result = new CResult();
 	result.setEndpointResult(epr);
-	//if (!_epURI.equals("http://sparql.uniprot.org"))
+	//if (!_epURI.equals("http://en.openei.org/sparql"))
 	//    return result;
 	log.info("### execute {}", _epURI);
 
@@ -119,7 +119,6 @@ public class CTask extends EndpointTask<CResult> {
 	QueryExecution qexec1 = QueryExecutionFactory.sparqlService(_epURI, query1);
 	try {
 	    ping = qexec1.execAsk();
-	    log.info("[Ping value is {}]", ping);
 	}
 	catch (Exception e) {
 	    log.info("[Error executing SPARQL query for {}]", _epURI);
@@ -129,49 +128,49 @@ public class CTask extends EndpointTask<CResult> {
 	// If the endpoint is accessible, try to gather VoID statistics and generate the profile.
 	if (ping) {
 	    log.info("[GENERATION of VoiD] {}", _epURI);
-	    //if (false) {
-	    //log.info("%%%%% {} 0", _epURI);
 	    triples = executeLongQuery(_epURI, queryNumberOfTriples);
 	    if (triples == -1)
 		VoIDPart = true;
-	    //log.info("%%%%% {} 1", _epURI);
+	    //log.info("Number of triples in {}: {}", _epURI, triples);
 	    //if (!_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack	    
 	    entities = executeLongQuery(_epURI, queryNumberOfEntities);
 	    if (entities == -1)
 		VoIDPart = true;
-	    //log.info("%%%%% {} 2", _epURI);
+	    //log.info("Number of entities in {}: {}", _epURI, entities);
 	    classes = executeLongQuery(_epURI, queryNumberOfClasses);
 	    if (classes == -1)
 		VoIDPart = true;
-	    //log.info("%%%%% {} 3", _epURI);
+	    //log.info("Number of classes in {}: {}", _epURI, classes);
 	    properties = executeLongQuery(_epURI, queryNumberOfProperties);
 	    if (properties == -1)
 		VoIDPart = true;
-	    //log.info("%%%%% {} 4", _epURI);
+	    //log.info("Number of properties in {}: {}", _epURI, properties);
 	    //if (!_epURI.equals("http://fr.dbpedia.org/sparql") && !_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack
 	    distinctSubjects = executeLongQuery(_epURI, queryNumberOfSubjects);
 	    if (distinctSubjects == -1)
 		VoIDPart = true;
-	    //log.info("%%%%% {} 5", _epURI);
+	    //log.info("Number of distinct subjects in {}: {}", _epURI, distinctSubjects);
 	    //if (!_epURI.equals("http://fr.dbpedia.org/sparql") && !_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack
 	    distinctObjects = executeLongQuery(_epURI, queryNumberOfObjects);
 	    if (distinctObjects == -1)
 		VoIDPart = true;
-	    //log.info("%%%%% {} 6", _epURI);
+	    //log.info("Number of distinct objects in {}: {}", _epURI, distinctObjects);
 	    exampleResourceList = executeQuery(_epURI, queryExampleResource);
 	    if (exampleResourceList.size() == 0)
 		VoIDPart = true;
-	    
+	    //log.info("Number of example resources in {}: {}", _epURI, exampleResourceList.size());
+
 	    try {
 		log.info("Coherence calculation for {} ...", _epURI);
-		//coherence = calculateCoherence(_epURI);
+		coherence = calculateCoherence(_epURI);
 	    }
 	    catch (Exception e) {
 		log.warn("[Error details: {}]", e.toString());
 	    }
 	    try {
 		log.info("Relationship Specialty calculation {} ...", _epURI);
-		//relationshipSpecialty = calculateRelationshipSpecialty(_epURI, triples, distinctSubjects);
+		if (triples != -1 && distinctSubjects != -1)
+		    relationshipSpecialty = calculateRelationshipSpecialty(_epURI, triples, distinctSubjects);
 	    }
 	    catch (Exception e) {
 		log.warn("[Error details: {}]", e.toString());
@@ -281,9 +280,9 @@ public class CTask extends EndpointTask<CResult> {
 	    }
 	}
 	catch (Exception e) {
-	    log.info("[Error executing SPARQL query for {}]", endpointURL);
-	    log.info("[SPARQL query: {}]", queryText);
-	    log.info("[Error details: {}]", e.toString());
+	    log.warn("[Error executing SPARQL query for {}]", endpointURL);
+	    log.warn("[SPARQL query: {}]", queryText);
+	    log.warn("[Error details: {}]", e.toString());
 	}
 	qexec.close() ;
 	return result;
@@ -292,6 +291,7 @@ public class CTask extends EndpointTask<CResult> {
     public java.util.List<java.lang.CharSequence> executeQuery(String endpointURL, String queryText) {
 	Query query = QueryFactory.create(queryText);
 	QueryExecution qexec = QueryExecutionFactory.sparqlService(endpointURL, query);
+	qexec.setTimeout(10, TimeUnit.MINUTES);
 	java.util.List<java.lang.CharSequence> list = new java.util.ArrayList<>();
 	try {
 	    ResultSet results = qexec.execSelect();
@@ -303,9 +303,9 @@ public class CTask extends EndpointTask<CResult> {
 	    }
 	}
 	catch (Exception e) {
-	    log.info("[Error executing SPARQL query for {}]", endpointURL);
-	    log.info("[SPARQL query: {}]", queryText);
-	    log.info("[Error details: {}]", e.toString());
+	    log.warn("[Error executing SPARQL query for {}]", endpointURL);
+	    log.warn("[SPARQL query: {}]", queryText);
+	    log.warn("[Error details: {}]", e.toString());
 	}
 	qexec.close() ;
 	return list;
@@ -313,11 +313,14 @@ public class CTask extends EndpointTask<CResult> {
     
     public double calculateCoherence(String endpointUrl) {
 	Set<String> types = getRDFTypes(endpointUrl);
+	//log.info("Number of types in {}: {}", endpointUrl, types.size());
 	//if(types.size()==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 	double weightedDenomSum = getTypesWeightedDenomSum(types, endpointUrl);
+	//log.info("Weighted denom sum in {}: {}", endpointUrl, weightedDenomSum);
 	//if(weightedDenomSum==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 	double structuredness = 0;
 	for(String type:types) {
+	    //log.info("Processing type {} in {}", type, endpointUrl);
 	    long occurenceSum = 0;
 	    Set<String> typePredicates = getTypePredicates(type, endpointUrl);
 	    long typeInstancesSize = getTypeInstancesSize(type, endpointUrl);
@@ -344,6 +347,7 @@ public class CTask extends EndpointTask<CResult> {
 	    + "WHERE { ?s a ?type }" ;
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    while (res.hasNext())
@@ -362,6 +366,7 @@ public class CTask extends EndpointTask<CResult> {
 	double sum = 0 ;
 	for (String type:types)
 	    {
+		//log.info("Processing type {} in {}", type, endpoint);
 		long typeInstancesSize = getTypeInstancesSize(type, endpoint);
 		long typePredicatesSize = getTypePredicates(type, endpoint).size();
 		sum = sum + typeInstancesSize + typePredicatesSize;
@@ -379,6 +384,7 @@ public class CTask extends EndpointTask<CResult> {
 	    + "}" ;
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    while (res.hasNext())
@@ -403,6 +409,7 @@ public class CTask extends EndpointTask<CResult> {
 	    + "}" ;
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    while (res.hasNext()) {
@@ -430,6 +437,7 @@ public class CTask extends EndpointTask<CResult> {
 	    + "}" ;
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    while (res.hasNext())
@@ -444,14 +452,16 @@ public class CTask extends EndpointTask<CResult> {
 	return predicateOccurences;
     }
     
-    public double calculateRelationshipSpecialty(String endpoint, int numOfTriples, int numOfSubjects) {
+    public double calculateRelationshipSpecialty(String endpoint, long numOfTriples, long numOfSubjects) {
 	Set<String> predicates = getRelationshipPredicates(endpoint);
+	//log.info("Number of predicates in {}: {}", endpoint, predicates.size());
 	long datasetSize = numOfTriples;
 	long subjects = numOfSubjects;
 	Kurtosis kurt = new Kurtosis();
 	double relationshipSpecialty = 0 ;
 	int i = 1;
 	for (String predicate:predicates){
+	    //log.info("Processing predicate {} in {}", predicate, endpoint);
 	    double [] occurences = getOccurences(predicate, endpoint, subjects);
 	    double kurtosis = kurt.evaluate(occurences);
 	    //long tpSize = getPredicateSize(predicate, endpoint, namedGraph);
@@ -468,6 +478,7 @@ public class CTask extends EndpointTask<CResult> {
 	queryString = "SELECT DISTINCT ?p WHERE {?s ?p ?o . FILTER isIRI(?o) } " ;
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query);
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    while(res.hasNext())
@@ -487,6 +498,7 @@ public class CTask extends EndpointTask<CResult> {
 	queryString = "SELECT (count(?o) as ?occ) WHERE { ?res <"+predicate+"> ?o . } Group by ?res" ;
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    int i = 0;
@@ -515,6 +527,7 @@ public class CTask extends EndpointTask<CResult> {
 	    + "}";
 	Query query = QueryFactory.create(queryString);
 	QueryExecution qExec = QueryExecutionFactory.sparqlService(endpoint, query );
+	qExec.setTimeout(10, TimeUnit.MINUTES);
 	try {
 	    ResultSet res = qExec.execSelect();
 	    while(res.hasNext())

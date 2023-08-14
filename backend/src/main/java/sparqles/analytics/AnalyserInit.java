@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import sparqles.avro.Endpoint;
 import sparqles.avro.availability.AResult;
+import sparqles.avro.calculation.CResult;
 import sparqles.avro.discovery.DResult;
 import sparqles.avro.features.FResult;
 
@@ -46,6 +47,7 @@ public class AnalyserInit {
 		PAnalyser p = new PAnalyser(_db);
 		DAnalyser d = new DAnalyser(_db);
 		FAnalyser f = new FAnalyser(_db);
+		CAnalyser c = new CAnalyser(_db);
 
 		log.info("Analysing {} endpoints",eps.size());
 		for (Endpoint ep: eps) {
@@ -55,6 +57,7 @@ public class AnalyserInit {
 			discoverability(ep,d);
 			interoperability(ep,f);
 			performance(ep,p);
+			calculation(ep,c);
 		}
 	}
 
@@ -152,4 +155,29 @@ public class AnalyserInit {
 		log.info("ANALYSE AVAILABILITY {} and {}",ep.getUri(), epRes.size());
 
 	}
+
+    	private void calculation(Endpoint ep, CAnalyser c) {
+
+		TreeSet<CResult> res = new TreeSet<CResult>(new Comparator<CResult>() {
+			public int compare(CResult o1, CResult o2) {
+				int diff =o1.getEndpointResult().getStart().compareTo(o2.getEndpointResult().getStart()); 
+				return diff;
+			}
+		});
+
+		List<CResult> epRes = _db.getResults(ep, CResult.class, CResult.SCHEMA$);
+		for(CResult epres: epRes){
+			res.add(epres);
+		}
+		if(_onlyLast&&epRes.size()!=0){
+			c.analyse(res.last());
+		}else{
+			for(CResult cres: res){
+				c.analyse(cres);
+			}
+		}
+		log.info("ANALYSE CALCULATION {} and {}",ep.getUri(), epRes.size());
+
+	}
+    
 }

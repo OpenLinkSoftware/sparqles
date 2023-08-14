@@ -33,7 +33,7 @@ public class CAnalyser extends Analytics<CResult> {
 		    cview.setVoID(false);
 		}
 		else {
-		    cview.setVoID(!pres.getVoID().equals(""));
+		    cview.setVoID(!pres.getVoID().toString().equals(""));
 		    cview.setVoIDPart(false);
 		}
 		if (pres.getSDPart()) {
@@ -41,7 +41,7 @@ public class CAnalyser extends Analytics<CResult> {
 		    cview.setSD(false);
 		}
 		else {
-		    cview.setSD(!pres.getSD().equals(""));
+		    cview.setSD(!pres.getSD().toString().equals(""));
 		    cview.setSDPart(false);
 		}
 		cview.setCoherence(pres.getCoherence());

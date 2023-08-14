@@ -131,34 +131,34 @@ public class CTask extends EndpointTask<CResult> {
 	    triples = executeLongQuery(_epURI, queryNumberOfTriples);
 	    if (triples == -1)
 		VoIDPart = true;
-	    //log.info("Number of triples in {}: {}", _epURI, triples);
+	    log.info("Number of triples in {}: {}", _epURI, triples);
 	    //if (!_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack	    
 	    entities = executeLongQuery(_epURI, queryNumberOfEntities);
 	    if (entities == -1)
 		VoIDPart = true;
-	    //log.info("Number of entities in {}: {}", _epURI, entities);
+	    log.info("Number of entities in {}: {}", _epURI, entities);
 	    classes = executeLongQuery(_epURI, queryNumberOfClasses);
 	    if (classes == -1)
 		VoIDPart = true;
-	    //log.info("Number of classes in {}: {}", _epURI, classes);
+	    log.info("Number of classes in {}: {}", _epURI, classes);
 	    properties = executeLongQuery(_epURI, queryNumberOfProperties);
 	    if (properties == -1)
 		VoIDPart = true;
-	    //log.info("Number of properties in {}: {}", _epURI, properties);
+	    log.info("Number of properties in {}: {}", _epURI, properties);
 	    //if (!_epURI.equals("http://fr.dbpedia.org/sparql") && !_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack
 	    distinctSubjects = executeLongQuery(_epURI, queryNumberOfSubjects);
 	    if (distinctSubjects == -1)
 		VoIDPart = true;
-	    //log.info("Number of distinct subjects in {}: {}", _epURI, distinctSubjects);
+	    log.info("Number of distinct subjects in {}: {}", _epURI, distinctSubjects);
 	    //if (!_epURI.equals("http://fr.dbpedia.org/sparql") && !_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack
 	    distinctObjects = executeLongQuery(_epURI, queryNumberOfObjects);
 	    if (distinctObjects == -1)
 		VoIDPart = true;
-	    //log.info("Number of distinct objects in {}: {}", _epURI, distinctObjects);
+	    log.info("Number of distinct objects in {}: {}", _epURI, distinctObjects);
 	    exampleResourceList = executeQuery(_epURI, queryExampleResource);
 	    if (exampleResourceList.size() == 0)
 		VoIDPart = true;
-	    //log.info("Number of example resources in {}: {}", _epURI, exampleResourceList.size());
+	    log.info("Number of example resources in {}: {}", _epURI, exampleResourceList.size());
 
 	    try {
 		log.info("Coherence calculation for {} ...", _epURI);
@@ -313,14 +313,16 @@ public class CTask extends EndpointTask<CResult> {
     
     public double calculateCoherence(String endpointUrl) {
 	Set<String> types = getRDFTypes(endpointUrl);
-	//log.info("Number of types in {}: {}", endpointUrl, types.size());
+	int typesSize = types.size();
+	log.info("Number of types in {}: {}", endpointUrl, typesSize);
 	//if(types.size()==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 	double weightedDenomSum = getTypesWeightedDenomSum(types, endpointUrl);
-	//log.info("Weighted denom sum in {}: {}", endpointUrl, weightedDenomSum);
+	log.info("Weighted denom sum in {}: {}", endpointUrl, weightedDenomSum);
 	//if(weightedDenomSum==0) return 0; // the SPARQL query has failed, so we cannot calculate the coherence
 	double structuredness = 0;
+	int i = 1;
 	for(String type:types) {
-	    //log.info("Processing type {} in {}", type, endpointUrl);
+	    log.info("Processing type {}/{} in coherence of {}", i, typesSize, endpointUrl);
 	    long occurenceSum = 0;
 	    Set<String> typePredicates = getTypePredicates(type, endpointUrl);
 	    long typeInstancesSize = getTypeInstancesSize(type, endpointUrl);
@@ -336,6 +338,7 @@ public class CTask extends EndpointTask<CResult> {
 	    double coverage = occurenceSum/denom;
 	    double weightedCoverage = (typePredicates.size()+ typeInstancesSize) / weightedDenomSum;
 	    structuredness = (structuredness + (coverage*weightedCoverage));
+	    i++;
 	}
 	return structuredness;
     }
@@ -364,12 +367,15 @@ public class CTask extends EndpointTask<CResult> {
     
     public static double getTypesWeightedDenomSum(Set<String> types, String endpoint) {
 	double sum = 0 ;
+	int typesSize = types.size();
+	int i = 1;
 	for (String type:types)
 	    {
-		//log.info("Processing type {} in {}", type, endpoint);
+		log.info("Processing type {}/{} in coherence of {}", i, typesSize, endpoint);
 		long typeInstancesSize = getTypeInstancesSize(type, endpoint);
 		long typePredicatesSize = getTypePredicates(type, endpoint).size();
 		sum = sum + typeInstancesSize + typePredicatesSize;
+		i++;
 	    }
 	return sum;
     }
@@ -454,14 +460,15 @@ public class CTask extends EndpointTask<CResult> {
     
     public double calculateRelationshipSpecialty(String endpoint, long numOfTriples, long numOfSubjects) {
 	Set<String> predicates = getRelationshipPredicates(endpoint);
-	//log.info("Number of predicates in {}: {}", endpoint, predicates.size());
+	int predicatesSize = predicates.size();
+	log.info("Number of predicates in {}: {}", endpoint, predicatesSize);
 	long datasetSize = numOfTriples;
 	long subjects = numOfSubjects;
 	Kurtosis kurt = new Kurtosis();
 	double relationshipSpecialty = 0 ;
 	int i = 1;
 	for (String predicate:predicates){
-	    //log.info("Processing predicate {} in {}", predicate, endpoint);
+	    log.info("Processing predicate {}/{} in RS of {}", i, predicatesSize, endpoint);
 	    double [] occurences = getOccurences(predicate, endpoint, subjects);
 	    double kurtosis = kurt.evaluate(occurences);
 	    //long tpSize = getPredicateSize(predicate, endpoint, namedGraph);

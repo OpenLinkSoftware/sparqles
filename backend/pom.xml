@@ -52,7 +52,7 @@
 					<!-- set alternative assemble directory -->
 					<assembleDirectory>${basedir}</assembleDirectory>
 
-					<extraJvmArguments>-Xmx4096m</extraJvmArguments>
+					<extraJvmArguments>-Xmx8192m</extraJvmArguments>
 
 					<!-- Generate bin scripts for windows and unix pr default -->
 					<platforms>

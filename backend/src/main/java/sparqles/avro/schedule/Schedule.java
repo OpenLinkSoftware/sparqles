@@ -7,13 +7,14 @@ package sparqles.avro.schedule;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Schedule extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Schedule\",\"namespace\":\"sparqles.avro.schedule\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"ATask\",\"type\":[\"string\",\"null\"]},{\"name\":\"FTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"PTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"DTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"ITask\",\"type\":[\"string\",\"null\"]},{\"name\":\"ETask\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Schedule\",\"namespace\":\"sparqles.avro.schedule\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"ATask\",\"type\":[\"string\",\"null\"]},{\"name\":\"FTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"PTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"DTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"CTask\",\"type\":[\"string\",\"null\"]},{\"name\":\"ITask\",\"type\":[\"string\",\"null\"]},{\"name\":\"ETask\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public sparqles.avro.Endpoint endpoint;
   @Deprecated public java.lang.CharSequence ATask;
   @Deprecated public java.lang.CharSequence FTask;
   @Deprecated public java.lang.CharSequence PTask;
   @Deprecated public java.lang.CharSequence DTask;
+  @Deprecated public java.lang.CharSequence CTask;
   @Deprecated public java.lang.CharSequence ITask;
   @Deprecated public java.lang.CharSequence ETask;
 
@@ -27,12 +28,13 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
   /**
    * All-args constructor.
    */
-  public Schedule(sparqles.avro.Endpoint endpoint, java.lang.CharSequence ATask, java.lang.CharSequence FTask, java.lang.CharSequence PTask, java.lang.CharSequence DTask, java.lang.CharSequence ITask, java.lang.CharSequence ETask) {
+  public Schedule(sparqles.avro.Endpoint endpoint, java.lang.CharSequence ATask, java.lang.CharSequence FTask, java.lang.CharSequence PTask, java.lang.CharSequence DTask, java.lang.CharSequence CTask, java.lang.CharSequence ITask, java.lang.CharSequence ETask) {
     this.endpoint = endpoint;
     this.ATask = ATask;
     this.FTask = FTask;
     this.PTask = PTask;
     this.DTask = DTask;
+    this.CTask = CTask;
     this.ITask = ITask;
     this.ETask = ETask;
   }
@@ -46,8 +48,9 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
     case 2: return FTask;
     case 3: return PTask;
     case 4: return DTask;
-    case 5: return ITask;
-    case 6: return ETask;
+    case 5: return CTask;
+    case 6: return ITask;
+    case 7: return ETask;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -60,8 +63,9 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
     case 2: FTask = (java.lang.CharSequence)value$; break;
     case 3: PTask = (java.lang.CharSequence)value$; break;
     case 4: DTask = (java.lang.CharSequence)value$; break;
-    case 5: ITask = (java.lang.CharSequence)value$; break;
-    case 6: ETask = (java.lang.CharSequence)value$; break;
+    case 5: CTask = (java.lang.CharSequence)value$; break;
+    case 6: ITask = (java.lang.CharSequence)value$; break;
+    case 7: ETask = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -142,6 +146,21 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
   }
 
   /**
+   * Gets the value of the 'CTask' field.
+   */
+  public java.lang.CharSequence getCTask() {
+    return CTask;
+  }
+
+  /**
+   * Sets the value of the 'CTask' field.
+   * @param value the value to set.
+   */
+  public void setCTask(java.lang.CharSequence value) {
+    this.CTask = value;
+  }
+
+  /**
    * Gets the value of the 'ITask' field.
    */
   public java.lang.CharSequence getITask() {
@@ -197,6 +216,7 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
     private java.lang.CharSequence FTask;
     private java.lang.CharSequence PTask;
     private java.lang.CharSequence DTask;
+    private java.lang.CharSequence CTask;
     private java.lang.CharSequence ITask;
     private java.lang.CharSequence ETask;
 
@@ -228,13 +248,17 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
         this.DTask = data().deepCopy(fields()[4].schema(), other.DTask);
         fieldSetFlags()[4] = true;
       }
-      if (isValidValue(fields()[5], other.ITask)) {
-        this.ITask = data().deepCopy(fields()[5].schema(), other.ITask);
+      if (isValidValue(fields()[5], other.CTask)) {
+        this.CTask = data().deepCopy(fields()[5].schema(), other.CTask);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.ETask)) {
-        this.ETask = data().deepCopy(fields()[6].schema(), other.ETask);
+      if (isValidValue(fields()[6], other.ITask)) {
+        this.ITask = data().deepCopy(fields()[6].schema(), other.ITask);
         fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.ETask)) {
+        this.ETask = data().deepCopy(fields()[7].schema(), other.ETask);
+        fieldSetFlags()[7] = true;
       }
     }
     
@@ -261,13 +285,17 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
         this.DTask = data().deepCopy(fields()[4].schema(), other.DTask);
         fieldSetFlags()[4] = true;
       }
-      if (isValidValue(fields()[5], other.ITask)) {
-        this.ITask = data().deepCopy(fields()[5].schema(), other.ITask);
+      if (isValidValue(fields()[5], other.CTask)) {
+        this.CTask = data().deepCopy(fields()[5].schema(), other.CTask);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.ETask)) {
-        this.ETask = data().deepCopy(fields()[6].schema(), other.ETask);
+      if (isValidValue(fields()[6], other.ITask)) {
+        this.ITask = data().deepCopy(fields()[6].schema(), other.ITask);
         fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.ETask)) {
+        this.ETask = data().deepCopy(fields()[7].schema(), other.ETask);
+        fieldSetFlags()[7] = true;
       }
     }
 
@@ -396,6 +424,31 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
       return this;
     }
 
+    /** Gets the value of the 'CTask' field */
+    public java.lang.CharSequence getCTask() {
+      return CTask;
+    }
+    
+    /** Sets the value of the 'CTask' field */
+    public sparqles.avro.schedule.Schedule.Builder setCTask(java.lang.CharSequence value) {
+      validate(fields()[5], value);
+      this.CTask = value;
+      fieldSetFlags()[5] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'CTask' field has been set */
+    public boolean hasCTask() {
+      return fieldSetFlags()[5];
+    }
+    
+    /** Clears the value of the 'CTask' field */
+    public sparqles.avro.schedule.Schedule.Builder clearCTask() {
+      CTask = null;
+      fieldSetFlags()[5] = false;
+      return this;
+    }
+
     /** Gets the value of the 'ITask' field */
     public java.lang.CharSequence getITask() {
       return ITask;
@@ -403,21 +456,21 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
     
     /** Sets the value of the 'ITask' field */
     public sparqles.avro.schedule.Schedule.Builder setITask(java.lang.CharSequence value) {
-      validate(fields()[5], value);
+      validate(fields()[6], value);
       this.ITask = value;
-      fieldSetFlags()[5] = true;
+      fieldSetFlags()[6] = true;
       return this; 
     }
     
     /** Checks whether the 'ITask' field has been set */
     public boolean hasITask() {
-      return fieldSetFlags()[5];
+      return fieldSetFlags()[6];
     }
     
     /** Clears the value of the 'ITask' field */
     public sparqles.avro.schedule.Schedule.Builder clearITask() {
       ITask = null;
-      fieldSetFlags()[5] = false;
+      fieldSetFlags()[6] = false;
       return this;
     }
 
@@ -428,21 +481,21 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
     
     /** Sets the value of the 'ETask' field */
     public sparqles.avro.schedule.Schedule.Builder setETask(java.lang.CharSequence value) {
-      validate(fields()[6], value);
+      validate(fields()[7], value);
       this.ETask = value;
-      fieldSetFlags()[6] = true;
+      fieldSetFlags()[7] = true;
       return this; 
     }
     
     /** Checks whether the 'ETask' field has been set */
     public boolean hasETask() {
-      return fieldSetFlags()[6];
+      return fieldSetFlags()[7];
     }
     
     /** Clears the value of the 'ETask' field */
     public sparqles.avro.schedule.Schedule.Builder clearETask() {
       ETask = null;
-      fieldSetFlags()[6] = false;
+      fieldSetFlags()[7] = false;
       return this;
     }
 
@@ -455,8 +508,9 @@ public class Schedule extends org.apache.avro.specific.SpecificRecordBase implem
         record.FTask = fieldSetFlags()[2] ? this.FTask : (java.lang.CharSequence) defaultValue(fields()[2]);
         record.PTask = fieldSetFlags()[3] ? this.PTask : (java.lang.CharSequence) defaultValue(fields()[3]);
         record.DTask = fieldSetFlags()[4] ? this.DTask : (java.lang.CharSequence) defaultValue(fields()[4]);
-        record.ITask = fieldSetFlags()[5] ? this.ITask : (java.lang.CharSequence) defaultValue(fields()[5]);
-        record.ETask = fieldSetFlags()[6] ? this.ETask : (java.lang.CharSequence) defaultValue(fields()[6]);
+        record.CTask = fieldSetFlags()[5] ? this.CTask : (java.lang.CharSequence) defaultValue(fields()[5]);
+        record.ITask = fieldSetFlags()[6] ? this.ITask : (java.lang.CharSequence) defaultValue(fields()[6]);
+        record.ETask = fieldSetFlags()[7] ? this.ETask : (java.lang.CharSequence) defaultValue(fields()[7]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

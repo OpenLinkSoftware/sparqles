@@ -35,6 +35,7 @@ public class Scheduler {
 
 	public final static String CRON_EVERY_HOUR="0 0 0/1 1/1 * ? *";
 	public final static String CRON_EVERY_ONETEN="0 30 1 1/1 * ? *";
+    	public final static String CRON_TWICE_A_MONTH="0 30 0 2/15 * ? *";
 	private final static String CRON_EVERY_DAY_AT_715="0 15 7 1/1 * ? *";
 	private final static String CRON_EVERY_DAY_AT_215="0 15 2 1/1 * ? *";
 	private final static String CRON_EVERY_MON_WED_FRI_SUN_THU_AT_410="0 10 4 ? * WED,THU *";
@@ -56,6 +57,7 @@ public class Scheduler {
 		taskSchedule.put(PTASK, CRON_EVERY_ONETEN);
 		taskSchedule.put(FTASK, CRON_EVERY_SUN_AT_310);
 		taskSchedule.put(DTASK, CRON_EVERY_SAT_AT_310);
+		taskSchedule.put(CTASK, CRON_TWICE_A_MONTH);
 		taskSchedule.put(ITASK, CRON_EVERY_DAY_AT_715);
 		taskSchedule.put(ETASK, CRON_EVERY_DAY_AT_215);
 	}
@@ -113,6 +115,9 @@ public class Scheduler {
 			}			
 			if(sd.getDTask()!=null){
 				schedule(TaskFactory.create(DTASK,ep, _dbm, _fm ), new CronBasedIterator(sd.getDTask().toString()));
+			}
+			if(sd.getCTask()!=null){
+				schedule(TaskFactory.create(CTASK,ep, _dbm, _fm ), new CronBasedIterator(sd.getCTask().toString()));
 			}
 			if(sd.getITask()!=null){
 				schedule(TaskFactory.create(ITASK,ep, _dbm, _fm ), new CronBasedIterator(sd.getITask().toString()));
@@ -234,6 +239,7 @@ public class Scheduler {
 		s.setPTask(taskSchedule.get(PTASK));
 		s.setFTask(taskSchedule.get(FTASK));
 		s.setDTask(taskSchedule.get(DTASK));
+		s.setCTask(taskSchedule.get(CTASK));
 		s.setITask(taskSchedule.get(ITASK));
 
 		return s;

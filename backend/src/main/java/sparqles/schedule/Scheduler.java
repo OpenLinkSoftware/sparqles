@@ -35,7 +35,7 @@ public class Scheduler {
 
 	public final static String CRON_EVERY_HOUR="0 0 0/1 1/1 * ? *";
 	public final static String CRON_EVERY_ONETEN="0 30 1 1/1 * ? *";
-    	public final static String CRON_TWICE_A_MONTH="0 30 0 2/15 * ? *";
+    	public final static String CRON_TWICE_A_MONTH="0 30 0 1/15 * ? *";
 	private final static String CRON_EVERY_DAY_AT_715="0 15 7 1/1 * ? *";
 	private final static String CRON_EVERY_DAY_AT_215="0 15 2 1/1 * ? *";
 	private final static String CRON_EVERY_MON_WED_FRI_SUN_THU_AT_410="0 10 4 ? * WED,THU *";

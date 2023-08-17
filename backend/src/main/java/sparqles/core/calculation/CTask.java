@@ -217,6 +217,7 @@ public class CTask extends EndpointTask<CResult> {
 	    Property voidsparqlEndpoint = modelVoID.createProperty(voidNS + "sparqlEndpoint");
 	    Property voidexampleResource = modelVoID.createProperty(voidNS + "exampleResource");
 	    Property coherenceValue = modelVoID.createProperty("https://www.3dfed.com/ontology/coherence");
+		Property relationshipSpecialtyValue = modelVoID.createProperty("https://www.3dfed.com/ontology/relationshipSpecialty");
 	    
 	    // get current date
 	    LocalDate currentDate = LocalDate.now();
@@ -226,7 +227,7 @@ public class CTask extends EndpointTask<CResult> {
 	    
 	    // construct the SPARQL Service Description in RDF
 	    endpointEntitySD.addProperty(RDF.type, sdService);
-		endpointEntitySD.addProperty(sdendpoint, endpointEntity);
+		endpointEntitySD.addProperty(sdendpoint, endpointEntitySD);
 		endpointEntitySD.addProperty(sddefaultDataset,
 				       modelSD.createResource().addProperty(RDF.type, sdDataset)
 				       .addProperty(sddefaultGraph,
@@ -238,10 +239,10 @@ public class CTask extends EndpointTask<CResult> {
 		endpointEntityVoiDDescription.addProperty(dctermsTitle, "Automatically constructed VoID description for a SPARQL Endpoint");
 		endpointEntityVoiDDescription.addProperty(dctermsCreator, sparqlesEntity);
 		endpointEntityVoiDDescription.addProperty(dctermsDate, currentDateLiteral);
-		endpointEntityVoiDDescription.addProperty(foafprimaryTopic, endpointEntity);
+		endpointEntityVoiDDescription.addProperty(foafprimaryTopic, endpointEntityVoiD);
 	    
 	    endpointEntityVoiD.addProperty(RDF.type, voidDataset);
-		endpointEntityVoiD.addProperty(voidsparqlEndpoint, endpointEntity);
+		endpointEntityVoiD.addProperty(voidsparqlEndpoint, endpointEntityVoiD);
 	    for (int i = 0; i < exampleResourceList.size(); i++)
 			endpointEntityVoiD.addProperty(voidexampleResource, modelVoID.createResource(exampleResourceList.get(i).toString()));
 		endpointEntityVoiD.addProperty(voidtriples, Long.toString(triples));
@@ -251,8 +252,9 @@ public class CTask extends EndpointTask<CResult> {
 		endpointEntityVoiD.addProperty(voiddistinctSubjects, Long.toString(distinctSubjects));
 		endpointEntityVoiD.addProperty(voiddistinctObjects, Long.toString(distinctObjects));
 	    
-	    // add the Coherence value for the endpoint
+	    // add the Coherence and Relationship Specialty values for the endpoint
 		endpointEntityVoiD.addProperty(coherenceValue, Double.toString(coherence));
+		endpointEntityVoiD.addProperty(relationshipSpecialtyValue, Double.toString(relationshipSpecialty));
 	    
 	    // the SD and VoID profiles have been generated, now we persist it
 	    java.io.StringWriter stringModelVoID = new java.io.StringWriter() ;

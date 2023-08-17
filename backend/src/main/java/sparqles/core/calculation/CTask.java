@@ -129,8 +129,10 @@ public class CTask extends EndpointTask<CResult> {
 	if (ping) {
 	    log.info("[GENERATION of VoiD] {}", _epURI);
 	    triples = executeLongQuery(_epURI, queryNumberOfTriples);
-	    if (triples == -1)
-		VoIDPart = true;
+	    if (triples == -1) {
+			VoIDPart = true;
+			SDPart = true;
+		}
 	    log.info("Number of triples in {}: {}", _epURI, triples);
 	    //if (!_epURI.equals("http://sparql.uniprot.org")) // TODO: fix this hack	    
 	    entities = executeLongQuery(_epURI, queryNumberOfEntities);
@@ -175,77 +177,91 @@ public class CTask extends EndpointTask<CResult> {
 	    catch (Exception e) {
 		log.warn("[Error details: {}]", e.toString());
 	    }
-	    
-	    Model model = ModelFactory.createDefaultModel();
-	    
-	    Resource endpointEntity = model.createResource(_epURI);
-	    Resource endpointEntityDescription = model.createResource(_epURI + "/profile");
-	    
-	    Resource sdService = model.createResource(sparqDescNS + "Service");
-	    Resource sdDataset = model.createResource(sparqDescNS + "Dataset");
-	    Resource sdGraph = model.createResource(sparqDescNS + "Graph");
-	    Resource voidDatasetDescription = model.createResource(voidNS + "DatasetDescription");
-	    Resource voidDataset = model.createResource(voidNS + "Dataset");
-	    Resource sparqlesEntity = model.createResource("https://sparqles.demo.openlinksw.com"); // TODO: This is hardcoded for now, needs to be dynamic
-	    
-	    Property sdendpoint = model.createProperty(sparqDescNS + "endpoint");
-	    Property sddefaultDataset = model.createProperty(sparqDescNS + "defaultDataset");
-	    Property sddefaultGraph = model.createProperty(sparqDescNS + "defaultGraph");
-	    Property voidtriples = model.createProperty(voidNS + "triples");
-	    Property voidentities = model.createProperty(voidNS + "entities");
-	    Property voidclasses = model.createProperty(voidNS + "classes");
-	    Property voidproperties = model.createProperty(voidNS + "properties");
-	    Property voiddistinctSubjects = model.createProperty(voidNS + "distinctSubjects");
-	    Property voiddistinctObjects = model.createProperty(voidNS + "distinctObjects");
-	    Property dctermsTitle = model.createProperty(dctermsNS + "title");
-	    Property dctermsCreator = model.createProperty(dctermsNS + "creator");
-	    Property dctermsDate = model.createProperty(dctermsNS + "date");
-	    Property foafprimaryTopic = model.createProperty(foafNS + "primaryTopic");
-	    Property voidsparqlEndpoint = model.createProperty(voidNS + "sparqlEndpoint");
-	    Property voidexampleResource = model.createProperty(voidNS + "exampleResource");
-	    Property coherenceValue = model.createProperty("https://www.3dfed.com/ontology/coherence");
+
+		// Separate model for the SPARQL Service Description
+		Model modelSD = ModelFactory.createDefaultModel();
+
+		// Separate model for the VoID Profile
+		Model modelVoID = ModelFactory.createDefaultModel();
+
+		// Resources for the SPARQL Service Description
+		Resource endpointEntitySD = modelSD.createResource(_epURI);
+		Resource sdService = modelSD.createResource(sparqDescNS + "Service");
+		Resource sdDataset = modelSD.createResource(sparqDescNS + "Dataset");
+		Resource sdGraph = modelSD.createResource(sparqDescNS + "Graph");
+
+		// Resources for the VoID Profile
+		Resource endpointEntityVoiD = modelVoID.createResource(_epURI);
+	    Resource endpointEntityVoiDDescription = modelVoID.createResource(_epURI + "/profile");
+	    Resource voidDatasetDescription = modelVoID.createResource(voidNS + "DatasetDescription");
+	    Resource voidDataset = modelVoID.createResource(voidNS + "Dataset");
+	    Resource sparqlesEntity = modelVoID.createResource("https://sparqles.demo.openlinksw.com"); // TODO: This is hardcoded for now, needs to be dynamic
+
+		// Properties for the SPARQL Service Description
+	    Property sdendpoint = modelSD.createProperty(sparqDescNS + "endpoint");
+	    Property sddefaultDataset = modelSD.createProperty(sparqDescNS + "defaultDataset");
+	    Property sddefaultGraph = modelSD.createProperty(sparqDescNS + "defaultGraph");
+		Property voidtriplesSD = modelVoID.createProperty(voidNS + "triples");
+
+		// Properties for the VoID Profile
+		Property dctermsTitle = modelVoID.createProperty(dctermsNS + "title");
+		Property dctermsCreator = modelVoID.createProperty(dctermsNS + "creator");
+		Property dctermsDate = modelVoID.createProperty(dctermsNS + "date");
+		Property foafprimaryTopic = modelVoID.createProperty(foafNS + "primaryTopic");
+		Property voidtriples = modelVoID.createProperty(voidNS + "triples");
+	    Property voidentities = modelVoID.createProperty(voidNS + "entities");
+	    Property voidclasses = modelVoID.createProperty(voidNS + "classes");
+	    Property voidproperties = modelVoID.createProperty(voidNS + "properties");
+	    Property voiddistinctSubjects = modelVoID.createProperty(voidNS + "distinctSubjects");
+	    Property voiddistinctObjects = modelVoID.createProperty(voidNS + "distinctObjects");
+	    Property voidsparqlEndpoint = modelVoID.createProperty(voidNS + "sparqlEndpoint");
+	    Property voidexampleResource = modelVoID.createProperty(voidNS + "exampleResource");
+	    Property coherenceValue = modelVoID.createProperty("https://www.3dfed.com/ontology/coherence");
 	    
 	    // get current date
 	    LocalDate currentDate = LocalDate.now();
 	    String currentDateString = currentDate.format(DateTimeFormatter.ISO_DATE);
 	    //Literal currentDateLiteral = model.createTypedLiteral(currentDateString, XSD.date);
-	    Literal currentDateLiteral = model.createLiteral(currentDateString);
+	    Literal currentDateLiteral = modelVoID.createLiteral(currentDateString);
 	    
 	    // construct the SPARQL Service Description in RDF
-	    endpointEntity.addProperty(RDF.type, sdService);
-	    endpointEntity.addProperty(sdendpoint, endpointEntity);
-	    endpointEntity.addProperty(sddefaultDataset,
-				       model.createResource().addProperty(RDF.type, sdDataset)
+	    endpointEntitySD.addProperty(RDF.type, sdService);
+		endpointEntitySD.addProperty(sdendpoint, endpointEntity);
+		endpointEntitySD.addProperty(sddefaultDataset,
+				       modelSD.createResource().addProperty(RDF.type, sdDataset)
 				       .addProperty(sddefaultGraph,
-						    model.createResource().addProperty(RDF.type, sdGraph)
-						    .addProperty(voidtriples, Long.toString(triples))));
+						    modelSD.createResource().addProperty(RDF.type, sdGraph)
+						    .addProperty(voidtriplesSD, Long.toString(triples))));
 	    
 	    // construct the VoID Profile in RDF
-	    endpointEntityDescription.addProperty(RDF.type, voidDatasetDescription);
-	    endpointEntityDescription.addProperty(dctermsTitle, "Automatically constructed VoID description for a SPARQL Endpoint");
-	    endpointEntityDescription.addProperty(dctermsCreator, sparqlesEntity);
-	    endpointEntityDescription.addProperty(dctermsDate, currentDateLiteral);
-	    endpointEntityDescription.addProperty(foafprimaryTopic, endpointEntity);
+	    endpointEntityVoiDDescription.addProperty(RDF.type, voidDatasetDescription);
+		endpointEntityVoiDDescription.addProperty(dctermsTitle, "Automatically constructed VoID description for a SPARQL Endpoint");
+		endpointEntityVoiDDescription.addProperty(dctermsCreator, sparqlesEntity);
+		endpointEntityVoiDDescription.addProperty(dctermsDate, currentDateLiteral);
+		endpointEntityVoiDDescription.addProperty(foafprimaryTopic, endpointEntity);
 	    
-	    endpointEntity.addProperty(RDF.type, voidDataset);
-	    endpointEntity.addProperty(voidsparqlEndpoint, endpointEntity);
+	    endpointEntityVoiD.addProperty(RDF.type, voidDataset);
+		endpointEntityVoiD.addProperty(voidsparqlEndpoint, endpointEntity);
 	    for (int i = 0; i < exampleResourceList.size(); i++)
-		endpointEntity.addProperty(voidexampleResource, model.createResource(exampleResourceList.get(i).toString()));
-	    endpointEntity.addProperty(voidtriples, Long.toString(triples));
-	    endpointEntity.addProperty(voidentities, Long.toString(entities));
-	    endpointEntity.addProperty(voidclasses, Long.toString(classes));
-	    endpointEntity.addProperty(voidproperties, Long.toString(properties));
-	    endpointEntity.addProperty(voiddistinctSubjects, Long.toString(distinctSubjects));
-	    endpointEntity.addProperty(voiddistinctObjects, Long.toString(distinctObjects));
+			endpointEntityVoiD.addProperty(voidexampleResource, modelVoID.createResource(exampleResourceList.get(i).toString()));
+		endpointEntityVoiD.addProperty(voidtriples, Long.toString(triples));
+		endpointEntityVoiD.addProperty(voidentities, Long.toString(entities));
+		endpointEntityVoiD.addProperty(voidclasses, Long.toString(classes));
+		endpointEntityVoiD.addProperty(voidproperties, Long.toString(properties));
+		endpointEntityVoiD.addProperty(voiddistinctSubjects, Long.toString(distinctSubjects));
+		endpointEntityVoiD.addProperty(voiddistinctObjects, Long.toString(distinctObjects));
 	    
 	    // add the Coherence value for the endpoint
-	    endpointEntity.addProperty(coherenceValue, Double.toString(coherence));
+		endpointEntityVoiD.addProperty(coherenceValue, Double.toString(coherence));
 	    
-	    // the profile has been generated, now we persist it
-	    java.io.StringWriter stringModel = new java.io.StringWriter() ;
-	    model.write(stringModel, "TURTLE");
-	    
-	    VoID = stringModel.toString();	    
+	    // the SD and VoID profiles have been generated, now we persist it
+	    java.io.StringWriter stringModelVoID = new java.io.StringWriter() ;
+	    modelVoID.write(stringModelVoID, "TURTLE");
+		VoID = stringModelVoID.toString();
+
+		java.io.StringWriter stringModelSD = new java.io.StringWriter() ;
+		modelSD.write(stringModelSD, "TURTLE");
+		SD = stringModelSD.toString();
 	}
 
 	result.setTriples(triples);

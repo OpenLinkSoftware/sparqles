@@ -5,7 +5,6 @@
 "fields": [ 
 {"name": "endpoint", "type": "sparqles.avro.Endpoint"},
 	{"name": "VoID", "type": "boolean"},
-	{"name": "generatedVoID", "type": "boolean"},
 	{"name": "SD", "type": "boolean"},
 	{"name": "serverName", "type": "string"},
 	{"name": "lastUpdate", "type": "long"}

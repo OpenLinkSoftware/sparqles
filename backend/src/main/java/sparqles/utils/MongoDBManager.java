@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import sparqles.avro.analytics.AvailabilityView;
 import sparqles.avro.analytics.DiscoverabilityView;
 import sparqles.avro.analytics.CalculationView;
-import sparqles.avro.analytics.Profile;
 import sparqles.avro.analytics.EPView;
 import sparqles.avro.analytics.Index;
 import sparqles.avro.analytics.InteroperabilityView;
@@ -84,7 +83,6 @@ public class MongoDBManager {
 	public final static String COLL_CALC_AGG="ctasks_agg";
 	public final static String COLL_FEAT_AGG="ftasks_agg";
 	public final static String COLL_EP_VIEW="epview";
-	public final static String COLL_PROFILE="profile";
 
 	private static Map<Class, String[]> obj2col = new HashMap<Class, String[]>();
 	static {
@@ -104,7 +102,6 @@ public class MongoDBManager {
 		obj2col.put(InteroperabilityView.class, new String[]{COLL_FEAT_AGG, VIEW_KEY});
 		obj2col.put(DiscoverabilityView.class, new String[]{COLL_DISC_AGG, VIEW_KEY} );
 		obj2col.put(CalculationView.class, new String[]{COLL_CALC_AGG, VIEW_KEY} );
-		obj2col.put(Profile.class, new String[]{COLL_PROFILE, VIEW_KEY} );
 	}
 	
 	
@@ -222,7 +219,6 @@ public class MongoDBManager {
 		if(res instanceof InteroperabilityView) return update(COLL_FEAT_AGG, ((InteroperabilityView) res).getEndpoint(),res, res.getSchema(),VIEW_KEY );
 		if(res instanceof DiscoverabilityView) return update(COLL_DISC_AGG, ((DiscoverabilityView) res).getEndpoint(),res, res.getSchema(),VIEW_KEY );
 		if(res instanceof CalculationView) return update(COLL_CALC_AGG, ((CalculationView) res).getEndpoint(),res, res.getSchema(),VIEW_KEY );
-		if(res instanceof Profile) return update(COLL_PROFILE, ((Profile) res).getEndpoint(),res, res.getSchema(),VIEW_KEY );
 
 		if(res instanceof Endpoint) return update(COLL_ENDS, ((Endpoint) res), res, res.getSchema(),EP_KEY );
 		if(res instanceof EPView) return update(COLL_EP_VIEW, ((EPView) res).getEndpoint(), res, res.getSchema(),VIEW_KEY );
@@ -508,7 +504,7 @@ public class MongoDBManager {
 		res = res && remove(ep, InteroperabilityView.class);
 		res = res && remove(ep, DiscoverabilityView.class);
 		res = res && remove(ep, PerformanceView.class);
-		res = res && remove(ep, Profile.class);
+		res = res && remove(ep, CalculationView.class);
 		return res;
 	}
 	

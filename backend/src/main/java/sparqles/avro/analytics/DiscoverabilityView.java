@@ -7,11 +7,10 @@ package sparqles.avro.analytics;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"DiscoverabilityView\",\"namespace\":\"sparqles.avro.analytics\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"VoID\",\"type\":\"boolean\"},{\"name\":\"generatedVoID\",\"type\":\"boolean\"},{\"name\":\"SD\",\"type\":\"boolean\"},{\"name\":\"serverName\",\"type\":\"string\"},{\"name\":\"lastUpdate\",\"type\":\"long\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"DiscoverabilityView\",\"namespace\":\"sparqles.avro.analytics\",\"fields\":[{\"name\":\"endpoint\",\"type\":{\"type\":\"record\",\"name\":\"Endpoint\",\"namespace\":\"sparqles.avro\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"datasets\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Dataset\",\"fields\":[{\"name\":\"uri\",\"type\":\"string\"},{\"name\":\"label\",\"type\":\"string\"}]}}}]}},{\"name\":\"VoID\",\"type\":\"boolean\"},{\"name\":\"SD\",\"type\":\"boolean\"},{\"name\":\"serverName\",\"type\":\"string\"},{\"name\":\"lastUpdate\",\"type\":\"long\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public sparqles.avro.Endpoint endpoint;
   @Deprecated public boolean VoID;
-  @Deprecated public boolean generatedVoID;
   @Deprecated public boolean SD;
   @Deprecated public java.lang.CharSequence serverName;
   @Deprecated public long lastUpdate;
@@ -26,10 +25,9 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
   /**
    * All-args constructor.
    */
-  public DiscoverabilityView(sparqles.avro.Endpoint endpoint, java.lang.Boolean VoID, java.lang.Boolean generatedVoID, java.lang.Boolean SD, java.lang.CharSequence serverName, java.lang.Long lastUpdate) {
+  public DiscoverabilityView(sparqles.avro.Endpoint endpoint, java.lang.Boolean VoID, java.lang.Boolean SD, java.lang.CharSequence serverName, java.lang.Long lastUpdate) {
     this.endpoint = endpoint;
     this.VoID = VoID;
-    this.generatedVoID = generatedVoID;
     this.SD = SD;
     this.serverName = serverName;
     this.lastUpdate = lastUpdate;
@@ -41,10 +39,9 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
     switch (field$) {
     case 0: return endpoint;
     case 1: return VoID;
-    case 2: return generatedVoID;
-    case 3: return SD;
-    case 4: return serverName;
-    case 5: return lastUpdate;
+    case 2: return SD;
+    case 3: return serverName;
+    case 4: return lastUpdate;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -54,10 +51,9 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
     switch (field$) {
     case 0: endpoint = (sparqles.avro.Endpoint)value$; break;
     case 1: VoID = (java.lang.Boolean)value$; break;
-    case 2: generatedVoID = (java.lang.Boolean)value$; break;
-    case 3: SD = (java.lang.Boolean)value$; break;
-    case 4: serverName = (java.lang.CharSequence)value$; break;
-    case 5: lastUpdate = (java.lang.Long)value$; break;
+    case 2: SD = (java.lang.Boolean)value$; break;
+    case 3: serverName = (java.lang.CharSequence)value$; break;
+    case 4: lastUpdate = (java.lang.Long)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -90,21 +86,6 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
    */
   public void setVoID(java.lang.Boolean value) {
     this.VoID = value;
-  }
-
-  /**
-   * Gets the value of the 'generatedVoID' field.
-   */
-  public java.lang.Boolean getGeneratedVoID() {
-    return generatedVoID;
-  }
-
-  /**
-   * Sets the value of the 'generatedVoID' field.
-   * @param value the value to set.
-   */
-  public void setGeneratedVoID(java.lang.Boolean value) {
-    this.generatedVoID = value;
   }
 
   /**
@@ -175,7 +156,6 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
 
     private sparqles.avro.Endpoint endpoint;
     private boolean VoID;
-    private boolean generatedVoID;
     private boolean SD;
     private java.lang.CharSequence serverName;
     private long lastUpdate;
@@ -196,21 +176,17 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
         this.VoID = data().deepCopy(fields()[1].schema(), other.VoID);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.generatedVoID)) {
-        this.generatedVoID = data().deepCopy(fields()[2].schema(), other.generatedVoID);
+      if (isValidValue(fields()[2], other.SD)) {
+        this.SD = data().deepCopy(fields()[2].schema(), other.SD);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.SD)) {
-        this.SD = data().deepCopy(fields()[3].schema(), other.SD);
+      if (isValidValue(fields()[3], other.serverName)) {
+        this.serverName = data().deepCopy(fields()[3].schema(), other.serverName);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.serverName)) {
-        this.serverName = data().deepCopy(fields()[4].schema(), other.serverName);
+      if (isValidValue(fields()[4], other.lastUpdate)) {
+        this.lastUpdate = data().deepCopy(fields()[4].schema(), other.lastUpdate);
         fieldSetFlags()[4] = true;
-      }
-      if (isValidValue(fields()[5], other.lastUpdate)) {
-        this.lastUpdate = data().deepCopy(fields()[5].schema(), other.lastUpdate);
-        fieldSetFlags()[5] = true;
       }
     }
     
@@ -225,21 +201,17 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
         this.VoID = data().deepCopy(fields()[1].schema(), other.VoID);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.generatedVoID)) {
-        this.generatedVoID = data().deepCopy(fields()[2].schema(), other.generatedVoID);
+      if (isValidValue(fields()[2], other.SD)) {
+        this.SD = data().deepCopy(fields()[2].schema(), other.SD);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.SD)) {
-        this.SD = data().deepCopy(fields()[3].schema(), other.SD);
+      if (isValidValue(fields()[3], other.serverName)) {
+        this.serverName = data().deepCopy(fields()[3].schema(), other.serverName);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.serverName)) {
-        this.serverName = data().deepCopy(fields()[4].schema(), other.serverName);
+      if (isValidValue(fields()[4], other.lastUpdate)) {
+        this.lastUpdate = data().deepCopy(fields()[4].schema(), other.lastUpdate);
         fieldSetFlags()[4] = true;
-      }
-      if (isValidValue(fields()[5], other.lastUpdate)) {
-        this.lastUpdate = data().deepCopy(fields()[5].schema(), other.lastUpdate);
-        fieldSetFlags()[5] = true;
       }
     }
 
@@ -292,30 +264,6 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
       return this;
     }
 
-    /** Gets the value of the 'generatedVoID' field */
-    public java.lang.Boolean getGeneratedVoID() {
-      return generatedVoID;
-    }
-    
-    /** Sets the value of the 'generatedVoID' field */
-    public sparqles.avro.analytics.DiscoverabilityView.Builder setGeneratedVoID(boolean value) {
-      validate(fields()[2], value);
-      this.generatedVoID = value;
-      fieldSetFlags()[2] = true;
-      return this; 
-    }
-    
-    /** Checks whether the 'generatedVoID' field has been set */
-    public boolean hasGeneratedVoID() {
-      return fieldSetFlags()[2];
-    }
-    
-    /** Clears the value of the 'generatedVoID' field */
-    public sparqles.avro.analytics.DiscoverabilityView.Builder clearGeneratedVoID() {
-      fieldSetFlags()[2] = false;
-      return this;
-    }
-
     /** Gets the value of the 'SD' field */
     public java.lang.Boolean getSD() {
       return SD;
@@ -323,20 +271,20 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
     
     /** Sets the value of the 'SD' field */
     public sparqles.avro.analytics.DiscoverabilityView.Builder setSD(boolean value) {
-      validate(fields()[3], value);
+      validate(fields()[2], value);
       this.SD = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[2] = true;
       return this; 
     }
     
     /** Checks whether the 'SD' field has been set */
     public boolean hasSD() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[2];
     }
     
     /** Clears the value of the 'SD' field */
     public sparqles.avro.analytics.DiscoverabilityView.Builder clearSD() {
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -347,21 +295,21 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
     
     /** Sets the value of the 'serverName' field */
     public sparqles.avro.analytics.DiscoverabilityView.Builder setServerName(java.lang.CharSequence value) {
-      validate(fields()[4], value);
+      validate(fields()[3], value);
       this.serverName = value;
-      fieldSetFlags()[4] = true;
+      fieldSetFlags()[3] = true;
       return this; 
     }
     
     /** Checks whether the 'serverName' field has been set */
     public boolean hasServerName() {
-      return fieldSetFlags()[4];
+      return fieldSetFlags()[3];
     }
     
     /** Clears the value of the 'serverName' field */
     public sparqles.avro.analytics.DiscoverabilityView.Builder clearServerName() {
       serverName = null;
-      fieldSetFlags()[4] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -372,20 +320,20 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
     
     /** Sets the value of the 'lastUpdate' field */
     public sparqles.avro.analytics.DiscoverabilityView.Builder setLastUpdate(long value) {
-      validate(fields()[5], value);
+      validate(fields()[4], value);
       this.lastUpdate = value;
-      fieldSetFlags()[5] = true;
+      fieldSetFlags()[4] = true;
       return this; 
     }
     
     /** Checks whether the 'lastUpdate' field has been set */
     public boolean hasLastUpdate() {
-      return fieldSetFlags()[5];
+      return fieldSetFlags()[4];
     }
     
     /** Clears the value of the 'lastUpdate' field */
     public sparqles.avro.analytics.DiscoverabilityView.Builder clearLastUpdate() {
-      fieldSetFlags()[5] = false;
+      fieldSetFlags()[4] = false;
       return this;
     }
 
@@ -395,10 +343,9 @@ public class DiscoverabilityView extends org.apache.avro.specific.SpecificRecord
         DiscoverabilityView record = new DiscoverabilityView();
         record.endpoint = fieldSetFlags()[0] ? this.endpoint : (sparqles.avro.Endpoint) defaultValue(fields()[0]);
         record.VoID = fieldSetFlags()[1] ? this.VoID : (java.lang.Boolean) defaultValue(fields()[1]);
-        record.generatedVoID = fieldSetFlags()[2] ? this.generatedVoID : (java.lang.Boolean) defaultValue(fields()[2]);
-        record.SD = fieldSetFlags()[3] ? this.SD : (java.lang.Boolean) defaultValue(fields()[3]);
-        record.serverName = fieldSetFlags()[4] ? this.serverName : (java.lang.CharSequence) defaultValue(fields()[4]);
-        record.lastUpdate = fieldSetFlags()[5] ? this.lastUpdate : (java.lang.Long) defaultValue(fields()[5]);
+        record.SD = fieldSetFlags()[2] ? this.SD : (java.lang.Boolean) defaultValue(fields()[2]);
+        record.serverName = fieldSetFlags()[3] ? this.serverName : (java.lang.CharSequence) defaultValue(fields()[3]);
+        record.lastUpdate = fieldSetFlags()[4] ? this.lastUpdate : (java.lang.Long) defaultValue(fields()[4]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

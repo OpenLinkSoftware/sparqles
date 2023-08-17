@@ -394,7 +394,6 @@ app.get('/discoverability', function(req, res){
 					nbEndpointsTotal++;
 					if(docs[i].lastUpdate>lastUpdate) lastUpdate=docs[i].lastUpdate;
 				        if(docs[i].VoID==true)nbEndpointsVoID++;
-				        if(docs[i].generatedVoID==true)nbEndpointsGeneratedVoID++;
 					if(docs[i].SD==true)nbEndpointsSD++;
 					if(docs[i].serverName.length>0&&docs[i].serverName!="missing") nbEndpointsServerName++;
 				}
@@ -402,7 +401,6 @@ app.get('/discoverability', function(req, res){
 					lastUpdate: new Date(lastUpdate).toUTCString(),
 					nbEndpointsSearch:nbEndpointsSearch,
 				        nbEndpointsVoID: nbEndpointsVoID,
-				        nbEndpointsGeneratedVoID: nbEndpointsGeneratedVoID,
 					nbEndpointsSD: nbEndpointsSD,
 					nbEndpointsServerName: nbEndpointsServerName,
 					nbEndpointsTotal: nbEndpointsTotal,

@@ -63,6 +63,35 @@ block content
               br
               span(onmouseover='tooltip.show(\'#{configDisco["Server Name"]}\')', onmouseout='tooltip.hide();') Server name:
               svg#disco(style='height: 350px;margin-top:-50px;')
+          article.wrpl(style='min-width: 400px;')
+            .wrplInnerBox(style='height: 380px;')
+              a(title='', href='./profiles')
+                h2 
+                  span(onmouseover='tooltip.show(\'#{configProfiles["profiles"]}\')', onmouseout='tooltip.hide();') Profiles
+              div
+                b #{parseFloat((profilesNbEndpointsVoID/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
+                | (#{profilesNbEndpointsVoID}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b calculated VoID descriptions
+              div
+                b #{parseFloat((profilesNbEndpointsVoIDPart/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
+                | (#{profilesNbEndpointsVoIDPart}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b partially calculated VoID descriptions
+              div
+                b #{parseFloat((profilesNbEndpointsSD/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
+                | (#{profilesNbEndpointsSD}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b calculated Service description
+              div
+                b #{parseFloat((profilesNbEndpointsSDPart/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
+                | (#{profilesNbEndpointsSDPart}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b partially calculated Service description
+              div
+                b #{parseFloat((profilesNbEndpointsCoherence/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
+                | (#{profilesNbEndpointsCoherence}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b calculated coherence
+              div
+                b #{parseFloat((profilesNbEndpointsRS/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
+                | (#{profilesNbEndpointsRS}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b calculated relation specialty
       script.
         var colors = d3.scale.category20();
         keyColor = function(d, i) {return colors(d.key)};

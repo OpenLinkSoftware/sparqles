@@ -83,38 +83,51 @@ app.get('/', function(req, res){
                     if(docs[i].VoID!=true && docs[i].SD!=true)nbEndpointsNoDesc++;;
                     if(docs[i].serverName.length>0&&docs[i].serverName!="missing") nbEndpointsServerName++;
                   }
-                  res.render('content/index.jade',{
-                    configInstanceTitle: configApp.get('configInstanceTitle'),
-                    amonths: amonths,
-                    index:index,
-                    indexInterop:indexInterop,
-                    nbEndpointsSearch: nbEndpointsSearch,
-                    nbEndpointsVoID: nbEndpointsVoID,
-                    nbEndpointsSD: nbEndpointsSD,
-                    nbEndpointsServerName: nbEndpointsServerName,
-                    nbEndpointsTotal: nbEndpointsTotal,
-                    nbEndpointsNoDesc: nbEndpointsNoDesc,
-                    lastUpdate: (lastUpdate.length > 0 ? lastUpdate[0].lastUpdate : 0),
-                    perf: {"threshold":10000 /*mostCommonThreshold[0]*/,"data":[{"key": "Cold Tests","color": "#1f77b4","values": [{"label" : "Median ASK" ,"value" : avgASKCold },{"label" : "Median JOIN" ,"value" : avgJOINCold}]},{"key": "Warm Tests","color": "#2ca02c","values": [{"label" : "Median ASK" ,"value" : avgASKWarm} ,{"label" : "Median JOIN" ,"value" : avgJOINWarm}]}]},
-                    configInterop: JSON.parse(fs.readFileSync('./texts/interoperability.json')),
-                    configPerformance: JSON.parse(fs.readFileSync('./texts/performance.json')),
-                    configDisco: JSON.parse(fs.readFileSync('./texts/discoverability.json')),
-				          	configAvailability: JSON.parse(fs.readFileSync('./texts/availability.json'))
-                  });
-/*
-                res.render('content/index.jade',{
-                  configInstanceTitle: configApp.get('configInstanceTitle'),
-                  amonths: amonths,
-                  index:index,
-                  indexInterop:indexInterop,
-                  nbEndpointsSearch: nbEndpointsSearch,
-                  lastUpdate: lastUpdate[0].lastUpdate,
-                  perf: {"threshold":10000 ,"data":[{"key": "Cold Tests","color": "#1f77b4","values": [{"label" : "Median ASK" ,"value" : avgASKCold },{"label" : "Median JOIN" ,"value" : avgJOINCold}]},{"key": "Warm Tests","color": "#2ca02c","values": [{"label" : "Median ASK" ,"value" : avgASKWarm} ,{"label" : "Median JOIN" ,"value" : avgJOINWarm}]}]},
-                  configInterop: JSON.parse(fs.readFileSync('./texts/interoperability.json')),
-                  configPerformance: JSON.parse(fs.readFileSync('./texts/performance.json')),
-                  configDisco: JSON.parse(fs.readFileSync('./texts/discoverability.json')),
-				  configAvailability: JSON.parse(fs.readFileSync('./texts/availability.json'))
-*/
+		  // get the profiles stats
+                  mongoDBProvider.getProfilesView( function(error,docs1){
+                    var profilesNbEndpointsVoID=0;
+                    var profilesNbEndpointsVoIDPart=0;
+                    var profilesNbEndpointsSD=0;
+                    var profilesNbEndpointsSDPart=0;
+                    var profilesNbEndpointsCoherence=0;
+                    var profilesNbEndpointsRS=0;
+                    var profilesNbEndpointsTotal=0;
+                    for (i in docs){
+                      profilesNbEndpointsTotal++;
+                      if(docs1[i].VoID==true)profilesNbEndpointsVoID++;
+                      if(docs1[i].VoIDPart==true)profilesNbEndpointsVoIDPart++;
+                      if(docs1[i].SD==true)profilesNbEndpointsSD++;
+                      if(docs1[i].SDPart==true)profilesNbEndpointsSDPart++;
+                      if(docs1[i].coherence!=-1)profilesNbEndpointsCoherence++;
+                      if(docs1[i].RS!=-1)profilesNbEndpointsRS++;
+                    }
+                    res.render('content/index.jade',{
+                      configInstanceTitle: configApp.get('configInstanceTitle'),
+                      amonths: amonths,
+                      index:index,
+                      indexInterop:indexInterop,
+                      nbEndpointsSearch: nbEndpointsSearch,
+                      nbEndpointsVoID: nbEndpointsVoID,
+                      nbEndpointsSD: nbEndpointsSD,
+                      nbEndpointsServerName: nbEndpointsServerName,
+                      nbEndpointsTotal: nbEndpointsTotal,
+		      nbEndpointsNoDesc: nbEndpointsNoDesc,
+                      profilesNbEndpointsVoID: profilesNbEndpointsVoID,
+                      profilesNbEndpointsVoIDPart: profilesNbEndpointsVoIDPart,
+                      profilesNbEndpointsSD: profilesNbEndpointsSD,
+                      profilesNbEndpointsSDPart: profilesNbEndpointsSDPart,
+                      profilesNbEndpointsCoherence: profilesNbEndpointsCoherence,
+                      profilesNbEndpointsRS: profilesNbEndpointsRS,
+                      profilesNbEndpointsTotal: profilesNbEndpointsTotal,
+                      lastUpdate: (lastUpdate.length > 0 ? lastUpdate[0].lastUpdate : 0),
+                      perf: {"threshold":10000 /*mostCommonThreshold[0]*/,"data":[{"key": "Cold Tests","color": "#1f77b4","values": [{"label" : "Median ASK" ,"value" : avgASKCold },{"label" : "Median JOIN" ,"value" : avgJOINCold}]},{"key": "Warm Tests","color": "#2ca02c","values": [{"label" : "Median ASK" ,"value" : avgASKWarm} ,{"label" : "Median JOIN" ,"value" : avgJOINWarm}]}]},
+                      configInterop: JSON.parse(fs.readFileSync('./texts/interoperability.json')),
+                      configPerformance: JSON.parse(fs.readFileSync('./texts/performance.json')),
+                      configDisco: JSON.parse(fs.readFileSync('./texts/discoverability.json')),
+                      configAvailability: JSON.parse(fs.readFileSync('./texts/availability.json')),
+		      configProfiles: JSON.parse(fs.readFileSync('./texts/profiles.json')),
+                    });
+		  });
                 });
               });
             });

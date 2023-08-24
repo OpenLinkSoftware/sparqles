@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import sparqles.avro.Endpoint;
+import sparqles.avro.analytics.EPView;
 import sparqles.avro.analytics.CalculationView;
+import sparqles.avro.analytics.EPViewCalculation;
 import sparqles.avro.calculation.CResult;
 import sparqles.core.calculation.CTask;
 import sparqles.utils.MongoDBManager;
@@ -26,6 +28,7 @@ public class CAnalyser extends Analytics<CResult> {
 
 		Endpoint ep = pres.getEndpointResult().getEndpoint();
 
+		EPView epview=getEPView(ep);
 		CalculationView cview= getView(ep);
 
 		if (pres.getVoIDPart()) {
@@ -48,8 +51,24 @@ public class CAnalyser extends Analytics<CResult> {
 		cview.setRS(pres.getRS());
 
 		cview.setLastUpdate(pres.getEndpointResult().getEnd());
+
+		EPViewCalculation cepview = epview.getCalculation();
+		cepview.setTriples(pres.getTriples());
+		cepview.setEntities(pres.getEntities());
+		cepview.setClasses(pres.getClasses());
+		cepview.setProperties(pres.getProperties());
+		cepview.setDistinctSubjects(pres.getDistinctSubjects());
+		cepview.setDistinctObjects(pres.getDistinctObjects());
+		cepview.setExampleResources(pres.getExampleResources());
+		cepview.setVoID(pres.getVoID());
+		cepview.setVoIDPart(pres.getVoIDPart());
+		cepview.setSD(pres.getSD());
+		cepview.setSDPart(pres.getSDPart());
+		cepview.setCoherence(pres.getCoherence());
+		cepview.setRS(pres.getRS());
 		
 		_db.update(cview);
+		_db.update(epview);
 		
 		return true;
 	}

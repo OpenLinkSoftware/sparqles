@@ -16,6 +16,7 @@ import sparqles.avro.analytics.EPViewInteroperabilityData;
 import sparqles.avro.analytics.EPViewPerformanceData;
 import sparqles.avro.Endpoint;
 import sparqles.avro.analytics.EPViewDiscoverability;
+import sparqles.avro.analytics.EPViewCalculation;
 import sparqles.avro.analytics.EPViewInteroperability;
 import sparqles.avro.analytics.EPViewPerformance;
 import sparqles.utils.MongoDBManager;
@@ -75,6 +76,9 @@ public abstract class Analytics<V extends SpecificRecordBase> {
 			
 			EPViewDiscoverability dv = new EPViewDiscoverability("", new ArrayList<EPViewDiscoverabilityData>(),new ArrayList<EPViewDiscoverabilityData>());
 			view.setDiscoverability(dv);
+
+			EPViewCalculation cv = new EPViewCalculation(-1l, -1l, -1l, -1l, -1l, -1l, new java.util.ArrayList<java.lang.CharSequence>(), "", false, "", false, -1.0, -1.0);
+			view.setCalculation(cv);
 			
 			_db.insert(view);
 		}else{

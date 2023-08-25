@@ -53,7 +53,6 @@ import com.mongodb.WriteResult;
 import com.mongodb.util.JSON;
 
 
-
 public class MongoDBManager {
 	private static final Logger log = LoggerFactory.getLogger(MongoDBManager.class);
 
@@ -543,5 +542,22 @@ public class MongoDBManager {
 		return true;
 	}
 
+        public long getFirstAvailabitlityTime() {
+	    long result = 0;
+	    DBCursor cursor = null;
+	    try {
+		DBCollection collection  = db.getCollection(COLL_AVAIL);
+		DBObject filter = new BasicDBObject();
+		DBObject projection = (DBObject) JSON.parse("{'endpointResult.start':1, '_id':0}");
+		DBObject sort = new BasicDBObject();
+		sort.put("endpointResult.start", 1);
+		cursor = collection.find(filter, projection).sort(sort).limit(1);
+		result = Long.parseLong(((DBObject)cursor.next().get("endpointResult")).get("start").toString());
+	    }
+	    finally {
+		cursor.close();
+	    }
+	    return result;
+	}
 
 }

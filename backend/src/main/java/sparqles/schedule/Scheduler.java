@@ -57,7 +57,7 @@ public class Scheduler {
 		taskSchedule.put(PTASK, CRON_EVERY_ONETEN);
 		taskSchedule.put(FTASK, CRON_EVERY_SUN_AT_310);
 		taskSchedule.put(DTASK, CRON_EVERY_SAT_AT_310);
-		taskSchedule.put(CTASK, CRON_TWICE_A_MONTH);
+		taskSchedule.put(CTASK, CRON_EVERY_SUN_AT_2330);
 		taskSchedule.put(ITASK, CRON_EVERY_DAY_AT_715);
 		taskSchedule.put(ETASK, CRON_EVERY_DAY_AT_215);
 	}

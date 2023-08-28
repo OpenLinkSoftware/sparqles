@@ -69,36 +69,38 @@ block content
                 h2 
                   span(onmouseover='tooltip.show(\'#{configProfiles["profiles"]}\')', onmouseout='tooltip.hide();') Profiles (VoID & Coherence)
               div
-                b #{parseFloat((profilesNbEndpointsVoID/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
-                | (#{profilesNbEndpointsVoID}/#{profilesNbEndpointsTotal}) of the endpoints have a 
-                b fully calculated VoID descriptions
+                b #{parseFloat((indexCalculation.VoID*100).toFixed(2))+ '%'} 
+                | of the endpoints have a 
+                b calculated VoID descriptions 
+                | (including 
+                b #{parseFloat((indexCalculation.VoIDPart*100).toFixed(2))+ '%'} 
+                | partially calculated)
               div
-                b #{parseFloat((profilesNbEndpointsVoIDPart/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
-                | (#{profilesNbEndpointsVoIDPart}/#{profilesNbEndpointsTotal}) of the endpoints have a 
-                b partially calculated VoID descriptions
-              div
-                b #{parseFloat((profilesNbEndpointsCoherence/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
-                | (#{profilesNbEndpointsCoherence}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b #{parseFloat((indexCalculation.Coherence*100).toFixed(2))+ '%'} 
+                | of the endpoints have a 
                 b calculated coherence
-              svg#coher(style='height: 350px; padding-right:10px;')
+              br
+              span(onmouseover='tooltip.show(\'#{configProfiles["Coherence"]}\')', onmouseout='tooltip.hide();') Coherence:
+              svg#coher(style='height: 350px;margin-top:-50px;')
           article.wrpl(style='min-width: 400px;')
             .wrplInnerBox(style='height: 380px;')
               a(title='', href='./profiles')
                 h2 
                   span(onmouseover='tooltip.show(\'#{configProfiles["profiles"]}\')', onmouseout='tooltip.hide();') Profiles (SD & RS)
               div
-                b #{parseFloat((profilesNbEndpointsSD/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
-                | (#{profilesNbEndpointsSD}/#{profilesNbEndpointsTotal}) of the endpoints have a 
-                b fully calculated Service description
+                b #{parseFloat((indexCalculation.SD*100).toFixed(2))+ '%'} 
+                | of the endpoints have a 
+                b calculated Service description 
+                | (including 
+                b #{parseFloat((indexCalculation.SDPart*100).toFixed(2))+ '%'} 
+                | partially calculated)
               div
-                b #{parseFloat((profilesNbEndpointsSDPart/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
-                | (#{profilesNbEndpointsSDPart}/#{profilesNbEndpointsTotal}) of the endpoints have a 
-                b partially calculated Service description
-              div
-                b #{parseFloat((profilesNbEndpointsRS/profilesNbEndpointsTotal*100).toFixed(2))+ '%'} 
-                | (#{profilesNbEndpointsRS}/#{profilesNbEndpointsTotal}) of the endpoints have a 
+                b #{parseFloat((indexCalculation.RS*100).toFixed(2))+ '%'} 
+                | of the endpoints have a 
                 b calculated relation specialty
-              svg#rs(style='height: 350px; padding-right:10px;')
+              br
+              span(onmouseover='tooltip.show(\'#{configProfiles["RS"]}\')', onmouseout='tooltip.hide();') Relationship specialty:
+              svg#rs(style='height: 350px;margin-top:-50px;')
       script.
         var colors = d3.scale.category20();
         keyColor = function(d, i) {return colors(d.key)};
@@ -198,7 +200,7 @@ block content
           return chart;
         });
 
-        // Coherence             // index.calculation.coherence[0].values
+        // Coherence
         nv.addGraph(function() {
           var chart = nv.models.pieChart()
             .x(function(d) { return d.label })
@@ -214,7 +216,7 @@ block content
             .startAngle(function(d) { return d.startAngle/2 -Math.PI/2 })
             .endAngle(function(d) { return d.endAngle/2 -Math.PI/2 });
           d3.select("#coher")
-            .datum([!{JSON.stringify()}])
+            .datum([!{JSON.stringify(indexCalculation.coherences[0].values)}])
             .transition().duration(500)
             .call(chart);
           nv.utils.windowResize(chart.update);
@@ -237,7 +239,7 @@ block content
             .startAngle(function(d) { return d.startAngle/2 -Math.PI/2 })
             .endAngle(function(d) { return d.endAngle/2 -Math.PI/2 });
           d3.select("#rs")
-            .datum([!{JSON.stringify()}])
+            .datum([!{JSON.stringify(indexCalculation.rss[0].values)}])
             .transition().duration(500)
             .call(chart);
           nv.utils.windowResize(chart.update);

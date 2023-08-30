@@ -2,6 +2,8 @@ package sparqles.utils.cli;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
+import java.net.URISyntaxException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -14,6 +16,8 @@ import sparqles.analytics.RefreshDataHubTask;
 import sparqles.analytics.StatsAnalyser;
 import sparqles.core.CONSTANTS;
 import sparqles.avro.Endpoint;
+import sparqles.core.EndpointFactory;
+import sparqles.avro.Dataset;
 import sparqles.core.SPARQLESProperties;
 import sparqles.avro.availability.AResult;
 import sparqles.avro.discovery.DResult;
@@ -56,6 +60,7 @@ public class SPARQLES extends CLIObject{
 		
 		opts.addOption(ARGUMENTS.OPTION_RUN);
 		opts.addOption(ARGUMENTS.OPTION_INDEX);
+		opts.addOption(ARGUMENTS.OPTION_ADD);
 	}
 
 	@Override
@@ -99,6 +104,14 @@ public class SPARQLES extends CLIObject{
 		}
 		if( CLIObject.hasOption(cmd, ARGUMENTS.PARAM_FLAG_STATS)){
 			computeStats();
+		}
+		if( CLIObject.hasOption(cmd, ARGUMENTS.PARAM_ADD)){
+		    String[] opts = CLIObject.getOptionValue(cmd, ARGUMENTS.PARAM_ADD).trim().split(";");
+		    String endpointUri = opts[0];
+		    String label = "";
+		    if (opts.length > 1)
+			label = opts[1];
+		    addEndpoint(endpointUri, label);
 		}
 		
 		if( CLIObject.hasOption(cmd, ARGUMENTS.PARAM_RUN)){
@@ -170,6 +183,24 @@ public class SPARQLES extends CLIObject{
 		
 		AnalyserInit a = new AnalyserInit(dbm, onlyLast);
 		a.run();
+	}
+
+        private void addEndpoint(String endpointUri, String label){
+	    log.info("Adding endpoint with uri \"{}\" and label \"{}\"", endpointUri, label);
+	    try {
+		Endpoint ep = EndpointFactory.newEndpoint(endpointUri);
+		if (!label.equals("")) {
+		    Dataset d = new Dataset();
+		    d.setLabel(label);
+		    d.setUri(endpointUri);
+		    List<Dataset> l =  ep.getDatasets();
+		    l.add(d);
+		    ep.setDatasets(l);
+		}
+		dbm.insert(ep);
+	    } catch (URISyntaxException e) {
+		log.warn("URISyntaxException:{}",e.getMessage());
+	    }
 	}
 
 	private void start() {

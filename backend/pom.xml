@@ -118,6 +118,7 @@
 				<imports>
 				  <import>${basedir}/src/main/avro/Endpoint.avsc</import>
 				  <import>${basedir}/src/main/avro/EndpointResult.avsc</import>
+				  <import>${basedir}/src/main/avro/Run.avsc</import>
 				</imports>
 				<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
 				<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>

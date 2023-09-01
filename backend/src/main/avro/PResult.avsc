@@ -2,6 +2,7 @@
 	"namespace": "sparqles.avro.performance",
  	"type": "record",
  	"import" : "EndpointResult.avsc",
+	"import" : "Run.avsc",
  	"name": "PResult",
  	"fields": [
  		{"name": "endpointResult", "type": "sparqles.avro.EndpointResult"},

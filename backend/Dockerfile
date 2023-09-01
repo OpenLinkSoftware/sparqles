@@ -1,4 +1,4 @@
-FROM maven:3-eclipse-temurin-8
+FROM maven:3.9.4-eclipse-temurin-8-alpine
 
 COPY . /build
 WORKDIR /build

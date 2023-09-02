@@ -50,6 +50,11 @@ public class AEvol  {
 			AMonth lastMonth = amonthsColl.findOne().orderBy("{date: -1}").as(AMonth.class);
 			Calendar cal = Calendar.getInstance();
 			Calendar calNow = Calendar.getInstance();
+			calNow.set(Calendar.DAY_OF_MONTH, 1);
+			calNow.set(Calendar.HOUR, 0);
+			calNow.set(Calendar.MINUTE, 0);
+			calNow.set(Calendar.SECOND, 0);
+			calNow.add(Calendar.MONTH, -1);
 			if (lastMonth == null) {
 			    cal.setTimeInMillis((dbm.getFirstAvailabitlityTime()/1000) * 1000);
 			    cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -64,7 +69,7 @@ public class AEvol  {
 		    
 		    //in case there is at least a full new month to process
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			while(calNow.get(Calendar.MONTH)>cal.get(Calendar.MONTH)){
+			while(calNow.compareTo(cal)>0){
 				//get the end of the month
 				Calendar calEnd = (Calendar) cal.clone();
 				calEnd.add(Calendar.MONTH, 1);
